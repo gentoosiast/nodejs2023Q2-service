@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
+import { InMemoryDbService } from '@shared/services/storage.service';
 import { UUIDService } from '@shared/services/uuid.service';
 import { User } from './interfaces/user.interface';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -13,9 +14,10 @@ export enum UpdateUserPasswordError {
 
 @Injectable()
 export class UserService {
-  private userDb = new Map<string, User>(); // uuid v4, User
-
-  constructor(private readonly uuidService: UUIDService) {}
+  constructor(
+    private readonly inMemoryDbService: InMemoryDbService,
+    private readonly uuidService: UUIDService,
+  ) {}
 
   create(userDto: CreateUserDto): UserEntity {
     const date = new Date().getTime();
@@ -26,19 +28,19 @@ export class UserService {
       createdAt: date,
       updatedAt: date,
     };
-    this.userDb.set(user.id, user);
+    this.inMemoryDbService.users.add(user.id, user);
 
     return plainToClass(UserEntity, user);
   }
 
   findAll(): UserEntity[] {
-    return [...this.userDb.values()].map((user) =>
-      plainToClass(UserEntity, user),
-    );
+    const users = this.inMemoryDbService.users.findAll();
+
+    return users.map((user) => plainToClass(UserEntity, user));
   }
 
   findOne(id: string): UserEntity | null {
-    const user = this.userDb.get(id);
+    const user = this.inMemoryDbService.users.findOne(id);
 
     if (!user) {
       return null;
@@ -48,19 +50,14 @@ export class UserService {
   }
 
   remove(id: string): boolean {
-    if (this.userDb.has(id)) {
-      this.userDb.delete(id);
-      return true;
-    }
-
-    return false;
+    return this.inMemoryDbService.users.delete(id);
   }
 
   updatePassword(
     id: string,
     { oldPassword, newPassword }: UpdatePasswordDto,
   ): UserEntity | UpdateUserPasswordError {
-    const user = this.userDb.get(id);
+    const user = this.inMemoryDbService.users.findOne(id);
 
     if (!user) {
       return UpdateUserPasswordError.UserNotFound;
@@ -77,7 +74,7 @@ export class UserService {
       version: user.version + 1,
     };
 
-    this.userDb.set(id, updatedUser);
+    this.inMemoryDbService.users.add(id, updatedUser);
 
     return plainToClass(UserEntity, updatedUser);
   }

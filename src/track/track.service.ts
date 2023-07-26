@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
+import { InMemoryDbService } from '@shared/services/storage.service';
 import { UUIDService } from '@shared/services/uuid.service';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackInfoDto } from './dtos/update-track-info.dto';
@@ -8,10 +9,12 @@ import { Track } from './interfaces/track.interface';
 
 @Injectable()
 export class TrackService {
-  private trackDb = new Map<string, Track>();
   static instance: TrackService;
 
-  constructor(private readonly uuidService: UUIDService) {
+  constructor(
+    private inMemoryDbService: InMemoryDbService,
+    private readonly uuidService: UUIDService,
+  ) {
     if (!!TrackService.instance) {
       return TrackService.instance;
     }
@@ -21,37 +24,21 @@ export class TrackService {
     return this;
   }
 
-  cleanupAfterAlbumDeletion(albumId: string): void {
-    this.trackDb.forEach((track) => {
-      if (track.albumId === albumId) {
-        track.albumId = null;
-      }
-    });
-  }
-
-  cleanupAfterArtistDeletion(artistId: string): void {
-    this.trackDb.forEach((track) => {
-      if (track.artistId === artistId) {
-        track.artistId = null;
-      }
-    });
-  }
-
   create(trackDto: CreateTrackDto): TrackEntity {
     const track: Track = { ...trackDto, id: this.uuidService.generate() };
-    this.trackDb.set(track.id, track);
+    this.inMemoryDbService.tracks.add(track.id, track);
 
     return plainToClass(TrackEntity, track);
   }
 
   findAll(): TrackEntity[] {
-    return [...this.trackDb.values()].map((track) =>
-      plainToClass(TrackEntity, track),
-    );
+    const tracks = this.inMemoryDbService.tracks.findAll();
+
+    return tracks.map((track) => plainToClass(TrackEntity, track));
   }
 
   findOne(id: string): TrackEntity | null {
-    const track = this.trackDb.get(id);
+    const track = this.inMemoryDbService.tracks.findOne(id);
 
     if (!track) {
       return null;
@@ -60,17 +47,24 @@ export class TrackService {
     return plainToClass(TrackEntity, track);
   }
 
-  remove(id: string): boolean {
-    if (this.trackDb.has(id)) {
-      this.trackDb.delete(id);
-      return true;
-    }
+  findMany(ids: string[]): TrackEntity[] {
+    const tracks = this.inMemoryDbService.tracks.findMany(ids);
 
-    return false;
+    return tracks.map((track) => plainToClass(TrackEntity, track));
+  }
+
+  isExists(id: string): boolean {
+    return this.inMemoryDbService.tracks.has(id);
+  }
+
+  remove(id: string): boolean {
+    this.inMemoryDbService.favTracks.delete(id);
+
+    return this.inMemoryDbService.tracks.delete(id);
   }
 
   updateInfo(id: string, trackDto: UpdateTrackInfoDto): TrackEntity | null {
-    const track = this.trackDb.get(id);
+    const track = this.inMemoryDbService.tracks.findOne(id);
 
     if (!track) {
       return null;
@@ -81,7 +75,7 @@ export class TrackService {
       ...trackDto,
     };
 
-    this.trackDb.set(track.id, updatedTrack);
+    this.inMemoryDbService.tracks.add(track.id, updatedTrack);
 
     return plainToClass(TrackEntity, updatedTrack);
   }
