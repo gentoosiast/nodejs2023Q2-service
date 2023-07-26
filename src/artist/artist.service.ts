@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { AlbumService } from '@album/album.service';
+import { TrackService } from '@track/track.service';
 import { UUIDService } from '@shared/services/uuid.service';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistInfoDto } from './dtos/update-artist-info.dto';
@@ -12,6 +13,7 @@ export class ArtistService {
   private artistDb = new Map<string, Artist>(); // uuid v4, Artist
   constructor(
     private readonly albumService: AlbumService,
+    private readonly trackService: TrackService,
     private readonly uuidService: UUIDService,
   ) {}
 
@@ -42,6 +44,7 @@ export class ArtistService {
     if (this.artistDb.has(id)) {
       this.artistDb.delete(id);
       this.albumService.cleanupAfterArtistDeletion(id);
+      this.trackService.cleanupAfterArtistDeletion(id);
       return true;
     }
 
