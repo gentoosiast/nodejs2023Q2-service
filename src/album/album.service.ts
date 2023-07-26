@@ -47,7 +47,7 @@ export class AlbumService {
     );
   }
 
-  findOne(id: string): AlbumEntity {
+  findOne(id: string): AlbumEntity | null {
     const album = this.albumDb.get(id);
 
     if (!album) {

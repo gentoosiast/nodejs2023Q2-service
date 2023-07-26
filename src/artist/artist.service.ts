@@ -30,7 +30,7 @@ export class ArtistService {
     );
   }
 
-  findOne(id: string): ArtistEntity {
+  findOne(id: string): ArtistEntity | null {
     const artist = this.artistDb.get(id);
 
     if (!artist) {

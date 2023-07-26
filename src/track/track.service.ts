@@ -50,7 +50,7 @@ export class TrackService {
     );
   }
 
-  findOne(id: string): TrackEntity {
+  findOne(id: string): TrackEntity | null {
     const track = this.trackDb.get(id);
 
     if (!track) {
