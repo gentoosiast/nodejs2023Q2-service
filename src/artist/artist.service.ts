@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
+import { AlbumService } from '@album/album.service';
 import { UUIDService } from '@shared/services/uuid.service';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistInfoDto } from './dtos/update-artist-info.dto';
@@ -9,7 +10,10 @@ import { Artist } from './interfaces/artist.interface';
 @Injectable()
 export class ArtistService {
   private artistDb = new Map<string, Artist>(); // uuid v4, Artist
-  constructor(private readonly uuidService: UUIDService) {}
+  constructor(
+    private readonly albumService: AlbumService,
+    private readonly uuidService: UUIDService,
+  ) {}
 
   create(artistDto: CreateArtistDto): ArtistEntity {
     const artist: Artist = { ...artistDto, id: this.uuidService.generate() };
@@ -37,6 +41,7 @@ export class ArtistService {
   remove(id: string): boolean {
     if (this.artistDb.has(id)) {
       this.artistDb.delete(id);
+      this.albumService.cleanupAfterArtistDeletion(id);
       return true;
     }
 
