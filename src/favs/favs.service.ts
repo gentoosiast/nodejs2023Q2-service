@@ -4,17 +4,7 @@ import { FavsResponseDto } from './dtos/favs-response.dto';
 
 @Injectable()
 export class FavsService {
-  static instance: FavsService;
-
-  constructor(private inMemoryDbService: InMemoryDbService) {
-    if (!!FavsService.instance) {
-      return FavsService.instance;
-    }
-
-    FavsService.instance = this;
-
-    return this;
-  }
+  constructor(private inMemoryDbService: InMemoryDbService) {}
 
   addAlbum(id: string): boolean {
     if (!this.inMemoryDbService.albums.has(id)) {

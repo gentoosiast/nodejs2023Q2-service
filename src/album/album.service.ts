@@ -9,20 +9,10 @@ import { Album } from './interfaces/album.interface';
 
 @Injectable()
 export class AlbumService {
-  static instance: AlbumService;
-
   constructor(
     private readonly inMemoryDbService: InMemoryDbService,
     private readonly uuidService: UUIDService,
-  ) {
-    if (!!AlbumService.instance) {
-      return AlbumService.instance;
-    }
-
-    AlbumService.instance = this;
-
-    return this;
-  }
+  ) {}
 
   create(albumDto: CreateAlbumDto): AlbumEntity {
     const album: Album = { ...albumDto, id: this.uuidService.generate() };

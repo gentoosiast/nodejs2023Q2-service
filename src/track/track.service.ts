@@ -9,20 +9,10 @@ import { Track } from './interfaces/track.interface';
 
 @Injectable()
 export class TrackService {
-  static instance: TrackService;
-
   constructor(
     private inMemoryDbService: InMemoryDbService,
     private readonly uuidService: UUIDService,
-  ) {
-    if (!!TrackService.instance) {
-      return TrackService.instance;
-    }
-
-    TrackService.instance = this;
-
-    return this;
-  }
+  ) {}
 
   create(trackDto: CreateTrackDto): TrackEntity {
     const track: Track = { ...trackDto, id: this.uuidService.generate() };
