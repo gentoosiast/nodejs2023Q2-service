@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -9,6 +8,7 @@ import {
   HttpStatus,
   NotFoundException,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -17,15 +17,12 @@ import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { UpdateUserPasswordError, UserService } from './user.service';
-import { UUIDService } from '@shared/services/uuid.service';
+import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('user')
 @Controller('user')
 export class UserController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly uuidService: UUIDService,
-  ) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   @ApiResponse({
@@ -57,11 +54,9 @@ export class UserController {
     status: HttpStatus.NOT_FOUND,
     description: 'User with provided userId was not found',
   })
-  findOne(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  findOne(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const user = this.userService.findOne(id);
 
     if (!user) {
@@ -109,13 +104,9 @@ export class UserController {
     description: "Provided user's password is wrong",
   })
   updatePassword(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
     @Body() updatePasswordDto: UpdatePasswordDto,
   ) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
     const result = this.userService.updatePassword(id, updatePasswordDto);
 
     if (result === UpdateUserPasswordError.UserNotFound) {
@@ -148,11 +139,9 @@ export class UserController {
     status: HttpStatus.NOT_FOUND,
     description: 'User with provided userId was not found',
   })
-  remove(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  remove(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.userService.remove(id);
 
     if (!result) {

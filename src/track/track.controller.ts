@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,6 +7,7 @@ import {
   HttpStatus,
   NotFoundException,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -16,15 +16,12 @@ import { TrackResponseDto } from './dtos/track-response.dto';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackInfoDto } from './dtos/update-track-info.dto';
 import { TrackService } from './track.service';
-import { UUIDService } from '@shared/services/uuid.service';
+import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('track')
 @Controller('track')
 export class TrackController {
-  constructor(
-    private readonly trackService: TrackService,
-    private uuidService: UUIDService,
-  ) {}
+  constructor(private readonly trackService: TrackService) {}
 
   @Get()
   @ApiResponse({
@@ -56,11 +53,9 @@ export class TrackController {
     status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
-  findOne(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  findOne(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const track = this.trackService.findOne(id);
 
     if (!track) {
@@ -104,13 +99,9 @@ export class TrackController {
     description: 'Track with provided id was not found',
   })
   updateInfo(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
     @Body() updateTrackInfoDto: UpdateTrackInfoDto,
   ) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
     const updatedTrack = this.trackService.updateInfo(id, updateTrackInfoDto);
 
     if (!updatedTrack) {
@@ -139,11 +130,9 @@ export class TrackController {
     status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
-  remove(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  remove(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.trackService.remove(id);
 
     if (!result) {

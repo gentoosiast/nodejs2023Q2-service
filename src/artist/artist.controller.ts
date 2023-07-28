@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,23 +7,21 @@ import {
   HttpStatus,
   NotFoundException,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UUIDService } from '@shared/services/uuid.service';
 import { ArtistService } from './artist.service';
 import { ArtistResponseDto } from './dtos/artist-response.dto';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistInfoDto } from './dtos/update-artist-info.dto';
+import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('artist')
 @Controller('artist')
 export class ArtistController {
-  constructor(
-    private readonly artistService: ArtistService,
-    private readonly uuidService: UUIDService,
-  ) {}
+  constructor(private readonly artistService: ArtistService) {}
 
   @Get()
   @ApiResponse({
@@ -56,11 +53,9 @@ export class ArtistController {
     status: HttpStatus.NOT_FOUND,
     description: 'Artist with provided id was not found',
   })
-  findOne(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  findOne(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const artist = this.artistService.findOne(id);
 
     if (!artist) {
@@ -104,13 +99,9 @@ export class ArtistController {
     description: 'Artist with provided id was not found',
   })
   updateInfo(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
     @Body() updateArtistInfoDto: UpdateArtistInfoDto,
   ) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
     const updatedArtist = this.artistService.updateInfo(
       id,
       updateArtistInfoDto,
@@ -142,11 +133,9 @@ export class ArtistController {
     status: HttpStatus.NOT_FOUND,
     description: 'Artist with provided id was not found',
   })
-  remove(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  remove(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.artistService.remove(id);
 
     if (!result) {

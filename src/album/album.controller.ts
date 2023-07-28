@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -8,6 +7,7 @@ import {
   HttpStatus,
   NotFoundException,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -16,15 +16,12 @@ import { AlbumResponseDto } from './dtos/album-response.dto';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumInfoDto } from './dtos/update-album-info.dto';
 import { AlbumService } from './album.service';
-import { UUIDService } from '@shared/services/uuid.service';
+import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('album')
 @Controller('album')
 export class AlbumController {
-  constructor(
-    private readonly albumService: AlbumService,
-    private readonly uuidService: UUIDService,
-  ) {}
+  constructor(private readonly albumService: AlbumService) {}
 
   @Get()
   @ApiResponse({
@@ -56,11 +53,9 @@ export class AlbumController {
     status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found',
   })
-  findOne(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  findOne(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const album = this.albumService.findOne(id);
 
     if (!album) {
@@ -104,13 +99,9 @@ export class AlbumController {
     description: 'Album with provided id was not found',
   })
   updateInfo(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
     @Body() updateAlbumInfoDto: UpdateAlbumInfoDto,
   ) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
     const updatedAlbum = this.albumService.updateInfo(id, updateAlbumInfoDto);
 
     if (!updatedAlbum) {
@@ -139,11 +130,9 @@ export class AlbumController {
     status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found',
   })
-  remove(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  remove(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.albumService.remove(id);
 
     if (!result) {

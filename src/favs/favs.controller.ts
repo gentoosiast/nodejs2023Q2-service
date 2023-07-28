@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Controller,
   Delete,
   Get,
@@ -7,21 +6,19 @@ import {
   HttpStatus,
   NotFoundException,
   Param,
+  ParseUUIDPipe,
   Post,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FavsService } from './favs.service';
-import { UUIDService } from '@shared/services/uuid.service';
 import { FavsResponseDto } from './dtos/favs-response.dto';
+import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('favs')
 @Controller('favs')
 export class FavsController {
-  constructor(
-    private readonly favsService: FavsService,
-    private readonly uuidService: UUIDService,
-  ) {}
+  constructor(private readonly favsService: FavsService) {}
 
   @Get()
   @ApiResponse({
@@ -51,11 +48,9 @@ export class FavsController {
     status: HttpStatus.UNPROCESSABLE_ENTITY,
     description: 'Album with provided id was not found',
   })
-  addAlbum(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  addAlbum(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.favsService.addAlbum(id);
 
     if (!result) {
@@ -86,11 +81,9 @@ export class FavsController {
     status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found in the favorites',
   })
-  removeAlbum(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  removeAlbum(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.favsService.removeAlbum(id);
 
     if (!result) {
@@ -116,11 +109,9 @@ export class FavsController {
     status: HttpStatus.UNPROCESSABLE_ENTITY,
     description: 'Artist with provided id was not found',
   })
-  addArtist(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  addArtist(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.favsService.addArtist(id);
 
     if (!result) {
@@ -151,11 +142,9 @@ export class FavsController {
     status: HttpStatus.NOT_FOUND,
     description: 'Artist with provided id was not found in the favorites',
   })
-  removeArtist(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  removeArtist(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.favsService.removeArtist(id);
 
     if (!result) {
@@ -181,11 +170,9 @@ export class FavsController {
     status: HttpStatus.UNPROCESSABLE_ENTITY,
     description: 'Track with provided id was not found',
   })
-  addTrack(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  addTrack(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.favsService.addTrack(id);
 
     if (!result) {
@@ -216,11 +203,9 @@ export class FavsController {
     status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found in the favorites',
   })
-  removeTrack(@Param('id') id: string) {
-    if (!this.uuidService.validate(id)) {
-      throw new BadRequestException('Invalid UUID');
-    }
-
+  removeTrack(
+    @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
+  ) {
     const result = this.favsService.removeTrack(id);
 
     if (!result) {
