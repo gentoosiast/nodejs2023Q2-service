@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -27,7 +28,7 @@ export class TrackController {
 
   @Get()
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Tracks have been successfully retrieved',
     type: TrackResponseDto,
     isArray: true,
@@ -43,16 +44,16 @@ export class TrackController {
     example: '11035eda-0858-43bc-9ab7-9d4ba0da4e09',
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'The track has been successfully retrieved',
     type: TrackResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of track is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
   findOne(@Param('id') id: string) {
@@ -71,12 +72,12 @@ export class TrackController {
 
   @Post()
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'The track has been successfully created',
     type: TrackResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Request body does not contain required fields',
   })
   create(@Body() createTrackDto: CreateTrackDto) {
@@ -90,16 +91,16 @@ export class TrackController {
     example: '3a36a0e8-186e-4861-940b-12326e4f4691',
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Track's info has been successfully updated",
     type: TrackResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of track is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
   updateInfo(
@@ -120,22 +121,22 @@ export class TrackController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiQuery({
     name: 'id',
     description: 'track id (uuid v4)',
     example: 'a7f382c5-a607-4cb4-be24-c2b669c1017d',
   })
   @ApiResponse({
-    status: 204,
+    status: HttpStatus.NO_CONTENT,
     description: 'Track has been successfully deleted',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of track is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
   remove(@Param('id') id: string) {

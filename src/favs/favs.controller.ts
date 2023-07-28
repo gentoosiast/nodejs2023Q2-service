@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -24,7 +25,7 @@ export class FavsController {
 
   @Get()
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Favorites have been successfully retrieved',
     type: FavsResponseDto,
   })
@@ -39,15 +40,15 @@ export class FavsController {
     example: '21d1e499-b101-43bf-aa68-42bc782ca0b2',
   })
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'The album has been successfully added to favorites',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of album is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 422,
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
     description: 'Album with provided id was not found',
   })
   addAlbum(@Param('id') id: string) {
@@ -67,22 +68,22 @@ export class FavsController {
   }
 
   @Delete('album/:id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiQuery({
     name: 'id',
     description: 'album id (uuid v4)',
     example: '652025d4-37cf-49f5-87a1-88e95774007d',
   })
   @ApiResponse({
-    status: 204,
+    status: HttpStatus.NO_CONTENT,
     description: 'Album has been successfully deleted from the favorites',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of album is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found in the favorites',
   })
   removeAlbum(@Param('id') id: string) {
@@ -104,15 +105,15 @@ export class FavsController {
     example: '8abbc4b2-a0df-4eba-8384-f5077d0d6ed5',
   })
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'The artist has been successfully added to favorites',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of artist is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 422,
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
     description: 'Artist with provided id was not found',
   })
   addArtist(@Param('id') id: string) {
@@ -132,22 +133,22 @@ export class FavsController {
   }
 
   @Delete('artist/:id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiQuery({
     name: 'id',
     description: 'artist id (uuid v4)',
     example: '8f62dd6d-db0c-4a93-85d0-850b2a55b8fd',
   })
   @ApiResponse({
-    status: 204,
+    status: HttpStatus.NO_CONTENT,
     description: 'Artist has been successfully deleted from the favorites',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of artist is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Artist with provided id was not found in the favorites',
   })
   removeArtist(@Param('id') id: string) {
@@ -169,15 +170,15 @@ export class FavsController {
     example: 'ba414b60-d562-4c80-af08-028d43b39f0a',
   })
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'The track has been successfully added to favorites',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of track is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 422,
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
     description: 'Track with provided id was not found',
   })
   addTrack(@Param('id') id: string) {
@@ -197,22 +198,22 @@ export class FavsController {
   }
 
   @Delete('track/:id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiQuery({
     name: 'id',
     description: 'track id (uuid v4)',
     example: 'accb9d24-8192-419e-8e06-01071f90c0e2',
   })
   @ApiResponse({
-    status: 204,
+    status: HttpStatus.NO_CONTENT,
     description: 'Track has been successfully deleted from the favorites',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of track is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found in the favorites',
   })
   removeTrack(@Param('id') id: string) {

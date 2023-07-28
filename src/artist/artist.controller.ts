@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -27,7 +28,7 @@ export class ArtistController {
 
   @Get()
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Artists have been successfully retrieved',
     type: ArtistResponseDto,
     isArray: true,
@@ -43,16 +44,16 @@ export class ArtistController {
     example: '7b06da94-6e57-4641-8baa-6f6d975c70aa',
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'The artist has been successfully retrieved',
     type: ArtistResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of artist is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Artist with provided id was not found',
   })
   findOne(@Param('id') id: string) {
@@ -71,12 +72,12 @@ export class ArtistController {
 
   @Post()
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'The artist has been successfully created',
     type: ArtistResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Request body does not contain required fields',
   })
   create(@Body() createArtistDto: CreateArtistDto) {
@@ -90,16 +91,16 @@ export class ArtistController {
     example: '70083ecc-00e2-45fd-b7fb-1a7b58eab45f',
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Artist's info has been successfully updated",
     type: ArtistResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of artist is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Artist with provided id was not found',
   })
   updateInfo(
@@ -123,22 +124,22 @@ export class ArtistController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiQuery({
     name: 'id',
     description: 'artist id (uuid v4)',
     example: '25f82d5b-e19f-405d-bafa-191930b0577b',
   })
   @ApiResponse({
-    status: 204,
+    status: HttpStatus.NO_CONTENT,
     description: 'Artist has been successfully deleted',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of artist is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Artist with provided id was not found',
   })
   remove(@Param('id') id: string) {

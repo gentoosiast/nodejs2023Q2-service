@@ -6,6 +6,7 @@ import {
   ForbiddenException,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -28,7 +29,7 @@ export class UserController {
 
   @Get()
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Users have been successfully retrieved',
     type: UserResponseDto,
     isArray: true,
@@ -44,16 +45,16 @@ export class UserController {
     example: 'e83cd69d-d1ef-4770-835e-5eb0537cc5c9',
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'The user has been successfully retrieved',
     type: UserResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided userId is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'User with provided userId was not found',
   })
   findOne(@Param('id') id: string) {
@@ -72,12 +73,12 @@ export class UserController {
 
   @Post()
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'The user has been successfully created',
     type: UserResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Request body does not contain required fields',
   })
   create(@Body() createUserDto: CreateUserDto) {
@@ -91,20 +92,20 @@ export class UserController {
     example: 'e83cd69d-d1ef-4770-835e-5eb0537cc5c9',
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "User's password has been successfully updated",
     type: UserResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided userId is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'User with provided userId was not found',
   })
   @ApiResponse({
-    status: 403,
+    status: HttpStatus.FORBIDDEN,
     description: "Provided user's password is wrong",
   })
   updatePassword(
@@ -129,22 +130,22 @@ export class UserController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiQuery({
     name: 'id',
     description: 'user id (uuid v4)',
     example: 'e83cd69d-d1ef-4770-835e-5eb0537cc5c9',
   })
   @ApiResponse({
-    status: 204,
+    status: HttpStatus.NO_CONTENT,
     description: 'User has been successfully deleted',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided userId is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'User with provided userId was not found',
   })
   remove(@Param('id') id: string) {

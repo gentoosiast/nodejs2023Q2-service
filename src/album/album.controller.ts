@@ -5,6 +5,7 @@ import {
   Delete,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
@@ -27,7 +28,7 @@ export class AlbumController {
 
   @Get()
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'Albums have been successfully retrieved',
     type: AlbumResponseDto,
     isArray: true,
@@ -43,16 +44,16 @@ export class AlbumController {
     example: '0a91b6a8-d1af-4556-80e0-f482e33232a0',
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: 'The album has been successfully retrieved',
     type: AlbumResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of album is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found',
   })
   findOne(@Param('id') id: string) {
@@ -71,12 +72,12 @@ export class AlbumController {
 
   @Post()
   @ApiResponse({
-    status: 201,
+    status: HttpStatus.CREATED,
     description: 'The album has been successfully created',
     type: AlbumResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Request body does not contain required fields',
   })
   create(@Body() createAlbumDto: CreateAlbumDto) {
@@ -90,16 +91,16 @@ export class AlbumController {
     example: 'ab00a15e-86c9-4ed1-84e0-3234eb315b2b',
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "Album's info has been successfully updated",
     type: AlbumResponseDto,
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of album is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found',
   })
   updateInfo(
@@ -120,22 +121,22 @@ export class AlbumController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiQuery({
     name: 'id',
     description: 'album id (uuid v4)',
     example: 'a868adda-61a6-4d4f-9ba9-43629fa73147',
   })
   @ApiResponse({
-    status: 204,
+    status: HttpStatus.NO_CONTENT,
     description: 'Album has been successfully deleted',
   })
   @ApiResponse({
-    status: 400,
+    status: HttpStatus.BAD_REQUEST,
     description: 'Provided id of album is invalid (not uuid)',
   })
   @ApiResponse({
-    status: 404,
+    status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found',
   })
   remove(@Param('id') id: string) {
