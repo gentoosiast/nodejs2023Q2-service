@@ -9,6 +9,7 @@ import {
   ValidateIf,
 } from 'class-validator';
 import { Track } from '@track/interfaces/track.interface';
+import { UUID_VERSION } from '@shared/constants/uuid';
 
 export class CreateTrackDto implements Omit<Track, 'id'> {
   @ApiProperty({
@@ -23,7 +24,7 @@ export class CreateTrackDto implements Omit<Track, 'id'> {
     description: 'ID of the artist who created this track',
     example: 'd7733d90-6119-4347-95d2-ed85678a3e42',
   })
-  @IsUUID('4', { message: 'artistId must be a UUID or null' })
+  @IsUUID(UUID_VERSION, { message: 'artistId must be a UUID or null' })
   @ValidateIf((_, value) => value !== null)
   artistId: string | null;
 
@@ -31,7 +32,7 @@ export class CreateTrackDto implements Omit<Track, 'id'> {
     description: 'ID of the album this track belongs to',
     example: 'bbf3d2ef-ed3c-4c5b-b156-9d9f2264c5a0',
   })
-  @IsUUID('4', { message: 'albumId must be a UUID or null' })
+  @IsUUID(UUID_VERSION, { message: 'albumId must be a UUID or null' })
   @ValidateIf((_, value) => value !== null)
   albumId: string | null;
 

@@ -9,6 +9,7 @@ import {
   IsUUID,
 } from 'class-validator';
 import { User } from '@user/interfaces/user.interface';
+import { UUID_VERSION } from '@shared/constants/uuid';
 
 export class UserResponseDto implements Omit<User, 'password'> {
   @ApiProperty({
@@ -16,7 +17,7 @@ export class UserResponseDto implements Omit<User, 'password'> {
     example: '83ef2c0c-967e-46bb-b748-6614bc99b7b4',
   })
   @IsNotEmpty()
-  @IsUUID('4')
+  @IsUUID(UUID_VERSION)
   id: string;
 
   @ApiProperty({

@@ -7,6 +7,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
+import { UUID_VERSION } from '@shared/constants/uuid';
 
 export class ArtistResponseDto implements Artist {
   @ApiProperty({
@@ -14,7 +15,7 @@ export class ArtistResponseDto implements Artist {
     example: '3606733e-3bea-489c-a045-afa6e63ac0b3',
   })
   @IsNotEmpty()
-  @IsUUID('4')
+  @IsUUID(UUID_VERSION)
   id: string; // uuid v4
 
   @ApiProperty({

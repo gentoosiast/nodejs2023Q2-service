@@ -9,6 +9,7 @@ import {
   ValidateIf,
 } from 'class-validator';
 import { Album } from '@album/interfaces/album.interface';
+import { UUID_VERSION } from '@shared/constants/uuid';
 
 export class UpdateAlbumInfoDto implements Omit<Album, 'id'> {
   @ApiProperty({
@@ -32,7 +33,7 @@ export class UpdateAlbumInfoDto implements Omit<Album, 'id'> {
     description: 'ID of the artist who created this album',
     example: '5f800c90-e1f0-483e-ab8d-1efff5f904e7',
   })
-  @IsUUID('4', { message: 'artistId must be a UUID or null' })
+  @IsUUID(UUID_VERSION, { message: 'artistId must be a UUID or null' })
   @ValidateIf((_, value) => value !== null)
   artistId: string | null; // refers to Artist
 }
