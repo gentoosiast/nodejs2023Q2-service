@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import metadata from './metadata';
 import { AppModule } from './app.module';
 import { DEFAULT_PORT } from './shared/constants/env';
 import { version as appVersion } from 'package.json';
@@ -15,6 +16,7 @@ async function bootstrap() {
     .setDescription('Home Library API: RS School Node.JS 2023 Q2 task')
     .setVersion(appVersion)
     .build();
+  await SwaggerModule.loadPluginMetadata(metadata);
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('docs', app, document);
 
