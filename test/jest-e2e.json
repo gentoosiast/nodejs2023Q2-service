@@ -3,6 +3,6 @@
   "rootDir": ".",
   "testEnvironment": "node",
   "transform": {
-    "^.+\\.(t|j)s$": ["@swc/jest"]
+    "^.+\\.(t|j)s$": "ts-jest"
   }
 }
