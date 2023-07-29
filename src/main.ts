@@ -5,7 +5,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import metadata from './metadata';
 import { AppModule } from './app.module';
 import { DEFAULT_PORT } from './shared/constants/env';
-import { version as appVersion } from 'package.json';
+import { description, version as appVersion } from 'package.json';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,7 +13,7 @@ async function bootstrap() {
   const port = configService.get<number>('PORT') ?? DEFAULT_PORT;
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Home Library Service')
-    .setDescription('Home Library API: RS School Node.JS 2023 Q2 task')
+    .setDescription(description)
     .setVersion(appVersion)
     .build();
   await SwaggerModule.loadPluginMetadata(metadata);
