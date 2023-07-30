@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InMemoryDbService } from '@shared/services/storage.service';
 import { FavsResponseDto } from './dtos/favs-response.dto';
+import { Favorites } from './interfaces/favorites.interface';
 
 @Injectable()
 export class FavsService {
@@ -37,7 +38,14 @@ export class FavsService {
   }
 
   findAll(): FavsResponseDto {
-    return this.inMemoryDbService.getFavorites();
+    const { albums, artists, tracks }: Favorites =
+      this.inMemoryDbService.getFavorites();
+
+    return {
+      albums: this.inMemoryDbService.albums.findMany(albums),
+      artists: this.inMemoryDbService.artists.findMany(artists),
+      tracks: this.inMemoryDbService.tracks.findMany(tracks),
+    };
   }
 
   removeAlbum(id: string): boolean {

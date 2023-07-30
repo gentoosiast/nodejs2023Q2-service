@@ -4,7 +4,7 @@ import { Album } from '@album/interfaces/album.interface';
 import { Artist } from '@artist/interfaces/artist.interface';
 import { Track } from '@track/interfaces/track.interface';
 import { User } from '@user/interfaces/user.interface';
-import { FavsResponseDto } from '@favs/dtos/favs-response.dto';
+import { Favorites } from '@favs/interfaces/favorites.interface';
 
 @Injectable()
 export class InMemoryDbService {
@@ -27,15 +27,15 @@ export class InMemoryDbService {
     return this;
   }
 
-  getFavorites(): FavsResponseDto {
-    const albumIds = [...this.favAlbums.values()];
-    const artistIds = [...this.favArtists.values()];
-    const trackIds = [...this.favTracks.values()];
+  getFavorites(): Favorites {
+    const albums = [...this.favAlbums.values()];
+    const artists = [...this.favArtists.values()];
+    const tracks = [...this.favTracks.values()];
 
     return {
-      albums: this.albums.findMany(albumIds),
-      artists: this.artists.findMany(artistIds),
-      tracks: this.tracks.findMany(trackIds),
+      albums,
+      artists,
+      tracks,
     };
   }
 }
