@@ -73,11 +73,8 @@ export class AlbumController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Request body does not contain required fields',
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Entity with provided artistId does not exists',
+    description:
+      'Request body does not contain required fields or artistId in DTO is invalid or points to non-existing entity',
   })
   create(@Body() createAlbumDto: CreateAlbumDto) {
     return this.albumService.create(createAlbumDto);
@@ -96,11 +93,8 @@ export class AlbumController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Provided id of album is invalid (not uuid)',
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Entity with provided artistId does not exists',
+    description:
+      'Provided id of album is invalid (not uuid) or artistId in DTO is invalid or points to non-existing entity',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,

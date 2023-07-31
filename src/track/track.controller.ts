@@ -73,15 +73,8 @@ export class TrackController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Request body does not contain required fields',
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Entity with provided artistId does not exists',
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Entity with provided albumId does not exists',
+    description:
+      'Request body does not contain required fields or one of ids in DTO is invalid or points to non-existing entity',
   })
   create(@Body() createTrackDto: CreateTrackDto) {
     return this.trackService.create(createTrackDto);
@@ -100,15 +93,8 @@ export class TrackController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Provided id of track is invalid (not uuid)',
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Entity with provided artistId does not exists',
-  })
-  @ApiResponse({
-    status: HttpStatus.BAD_REQUEST,
-    description: 'Entity with provided albumId does not exists',
+    description:
+      'Provided id of track is invalid (not uuid) or one of ids in DTO is invalid or points to non-existing entity',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
