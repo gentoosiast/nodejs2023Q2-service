@@ -15,7 +15,7 @@ export class InMemoryDbService {
   favAlbums = new Set<string>();
   favArtists = new Set<string>();
   favTracks = new Set<string>();
-  static instance: InMemoryDbService;
+  private static instance: InMemoryDbService;
 
   constructor() {
     if (!!InMemoryDbService.instance) {
