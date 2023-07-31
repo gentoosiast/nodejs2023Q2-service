@@ -48,11 +48,11 @@ export class UserController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Provided userId is invalid (not uuid)',
+    description: 'Provided user id is invalid (not uuid)',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'User with provided userId was not found',
+    description: 'User with provided id was not found',
   })
   findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
@@ -93,11 +93,11 @@ export class UserController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Provided userId is invalid (not uuid)',
+    description: 'Provided user id is invalid (not uuid)',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'User with provided userId was not found',
+    description: 'User with provided id was not found',
   })
   @ApiResponse({
     status: HttpStatus.FORBIDDEN,
@@ -133,11 +133,11 @@ export class UserController {
   })
   @ApiResponse({
     status: HttpStatus.BAD_REQUEST,
-    description: 'Provided userId is invalid (not uuid)',
+    description: 'Provided user id is invalid (not uuid)',
   })
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
-    description: 'User with provided userId was not found',
+    description: 'User with provided id was not found',
   })
   remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
