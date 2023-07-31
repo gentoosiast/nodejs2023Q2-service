@@ -6,6 +6,7 @@ import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumInfoDto } from './dtos/update-album-info.dto';
 import { AlbumEntity } from './entities/album.entity';
 import { Album } from './interfaces/album.interface';
+import { UnknownIdException } from '@shared/exceptions/unknown-id.exception';
 
 @Injectable()
 export class AlbumService {
@@ -15,6 +16,13 @@ export class AlbumService {
   ) {}
 
   create(albumDto: CreateAlbumDto): AlbumEntity {
+    if (
+      albumDto.artistId &&
+      !this.inMemoryDbService.artists.has(albumDto.artistId)
+    ) {
+      throw new UnknownIdException('artistId');
+    }
+
     const album: Album = { ...albumDto, id: this.uuidService.generate() };
     this.inMemoryDbService.albums.add(album.id, album);
 
@@ -63,6 +71,13 @@ export class AlbumService {
   }
 
   updateInfo(id: string, albumDto: UpdateAlbumInfoDto): AlbumEntity | null {
+    if (
+      albumDto.artistId &&
+      !this.inMemoryDbService.artists.has(albumDto.artistId)
+    ) {
+      throw new UnknownIdException('artistId');
+    }
+
     const album = this.inMemoryDbService.albums.findOne(id);
 
     if (!album) {

@@ -6,6 +6,7 @@ import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackInfoDto } from './dtos/update-track-info.dto';
 import { TrackEntity } from './entities/track.entity';
 import { Track } from './interfaces/track.interface';
+import { UnknownIdException } from '@shared/exceptions/unknown-id.exception';
 
 @Injectable()
 export class TrackService {
@@ -15,6 +16,20 @@ export class TrackService {
   ) {}
 
   create(trackDto: CreateTrackDto): TrackEntity {
+    if (
+      trackDto.artistId &&
+      !this.inMemoryDbService.artists.has(trackDto.artistId)
+    ) {
+      throw new UnknownIdException('artistId');
+    }
+
+    if (
+      trackDto.albumId &&
+      !this.inMemoryDbService.albums.has(trackDto.albumId)
+    ) {
+      throw new UnknownIdException('albumId');
+    }
+
     const track: Track = { ...trackDto, id: this.uuidService.generate() };
     this.inMemoryDbService.tracks.add(track.id, track);
 
@@ -54,6 +69,20 @@ export class TrackService {
   }
 
   updateInfo(id: string, trackDto: UpdateTrackInfoDto): TrackEntity | null {
+    if (
+      trackDto.artistId &&
+      !this.inMemoryDbService.artists.has(trackDto.artistId)
+    ) {
+      throw new UnknownIdException('artistId');
+    }
+
+    if (
+      trackDto.albumId &&
+      !this.inMemoryDbService.albums.has(trackDto.albumId)
+    ) {
+      throw new UnknownIdException('albumId');
+    }
+
     const track = this.inMemoryDbService.tracks.findOne(id);
 
     if (!track) {
