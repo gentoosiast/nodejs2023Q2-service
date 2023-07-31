@@ -29,7 +29,7 @@ export class TrackResponseDto implements Track {
   name: string;
 
   @ApiProperty({
-    description: 'ID of the artist who created this track',
+    description: 'ID of the artist who created this track (or null)',
     example: '82e5e3a7-5f9a-4de4-9bfd-1398d3c0571e',
   })
   @IsUUID(UUID_VERSION, { message: 'artistId must be a UUID or null' })
@@ -37,7 +37,7 @@ export class TrackResponseDto implements Track {
   artistId: string | null;
 
   @ApiProperty({
-    description: 'ID of the album this track belongs to',
+    description: 'ID of the album this track belongs to (or null)',
     example: '48d83402-b63c-4d23-abdf-43094e0d05b9',
   })
   @IsUUID(UUID_VERSION, { message: 'albumId must be a UUID or null' })

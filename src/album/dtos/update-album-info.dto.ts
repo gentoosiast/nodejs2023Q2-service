@@ -30,7 +30,7 @@ export class UpdateAlbumInfoDto implements Omit<Album, 'id'> {
   year: number;
 
   @ApiProperty({
-    description: 'ID of the artist who created this album',
+    description: 'ID of the artist who created this album (or null)',
     example: '5f800c90-e1f0-483e-ab8d-1efff5f904e7',
   })
   @IsUUID(UUID_VERSION, { message: 'artistId must be a UUID or null' })

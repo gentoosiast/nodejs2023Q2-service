@@ -21,7 +21,7 @@ export class CreateTrackDto implements Omit<Track, 'id'> {
   name: string;
 
   @ApiProperty({
-    description: 'ID of the artist who created this track',
+    description: 'ID of the artist who created this track (or null)',
     example: 'd7733d90-6119-4347-95d2-ed85678a3e42',
   })
   @IsUUID(UUID_VERSION, { message: 'artistId must be a UUID or null' })
@@ -29,7 +29,7 @@ export class CreateTrackDto implements Omit<Track, 'id'> {
   artistId: string | null;
 
   @ApiProperty({
-    description: 'ID of the album this track belongs to',
+    description: 'ID of the album this track belongs to (or null)',
     example: 'bbf3d2ef-ed3c-4c5b-b156-9d9f2264c5a0',
   })
   @IsUUID(UUID_VERSION, { message: 'albumId must be a UUID or null' })

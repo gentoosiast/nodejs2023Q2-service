@@ -16,7 +16,7 @@ export class ArtistResponseDto implements Artist {
   })
   @IsNotEmpty()
   @IsUUID(UUID_VERSION)
-  id: string; // uuid v4
+  id: string;
 
   @ApiProperty({
     description: 'artist name',
