@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { FavsService } from '@favs/favs.service';
-import { InMemoryDbService } from '@shared/services/storage.service';
+import { InMemoryDbService } from '@shared/services/in-memory-db.service';
 import { TrackService } from '@track/track.service';
 import { UUIDService } from '@shared/services/uuid.service';
 import { CreateAlbumDto } from './dtos/create-album.dto';

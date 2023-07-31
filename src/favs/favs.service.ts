@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { InMemoryDbService } from '@shared/services/storage.service';
+import { InMemoryDbService } from '@shared/services/in-memory-db.service';
 import { FavsResponseDto } from './dtos/favs-response.dto';
 import { Favorites } from './interfaces/favorites.interface';
 

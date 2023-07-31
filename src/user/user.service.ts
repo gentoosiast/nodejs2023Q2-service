@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import { InMemoryDbService } from '@shared/services/storage.service';
+import { InMemoryDbService } from '@shared/services/in-memory-db.service';
 import { UUIDService } from '@shared/services/uuid.service';
 import { User } from './interfaces/user.interface';
 import { CreateUserDto } from './dtos/create-user.dto';
