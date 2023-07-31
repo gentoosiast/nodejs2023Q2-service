@@ -9,6 +9,7 @@ import { GlobalExceptionFilter } from '@shared/filters/global/global-exception.f
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT') ?? DEFAULT_PORT;
   const swaggerConfig = new DocumentBuilder()
@@ -21,7 +22,6 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalFilters(new GlobalExceptionFilter());
-  app.enableCors();
   await app.listen(port);
 }
 bootstrap();
