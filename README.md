@@ -1,35 +1,54 @@
 # Home Library Service
 
-## Prerequisites
+RS School NodeJS 2023 Q2 - Week 6 Task
 
-- Git - [Download & Install Git](https://git-scm.com/downloads).
-- Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
+`Users` can create, read, update, delete data about `Artists`, `Tracks` and `Albums`, add them to `Favorites` in their own Home Library!
 
-## Downloading
+## Installation
 
-```
-git clone {repository URL}
-```
+**IMPORTANT**: Use Node.js LTS version (18.17.0 at the time of writing)
 
-## Installing NPM modules
+Clone this repository
 
-```
-npm install
-```
+Install all dependencies with `npm install`
 
-## Running application
+Create `.env` config using `.env.example` as reference.
+
+## Provided NPM scripts
+
+### Running application
 
 ```
 npm start
 ```
 
-After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
-For more information about OpenAPI/Swagger please visit https://swagger.io/.
+You can start application in watch mode (enables live-reloading on changes in source files)
 
-## Testing
+```
+npm run start:dev
+```
 
-After application running open new terminal and enter:
+Additionally to watch mode you can also enable debug mode
+
+```
+npm run start:debug
+```
+
+There is also a script to build & start application in production mode
+
+```
+npm run start:prod
+```
+
+You can also build application without starting it
+
+```
+npm run build
+```
+
+### Testing
+
+**After application is running open new terminal and enter:**
 
 To run all tests without authorization
 
@@ -37,7 +56,7 @@ To run all tests without authorization
 npm run test
 ```
 
-To run only one of all test suites
+To run only specific test suite without authorization
 
 ```
 npm run test -- <path to suite>
@@ -51,11 +70,25 @@ npm run test:auth
 
 To run only specific test suite with authorization
 
+**NOTE: authorization will be implemented later, in 3rd part of this task assignment**
+
 ```
 npm run test:auth -- <path to suite>
 ```
 
-### Auto-fix and format
+To start Jest in watch mode
+
+```
+npm run test:watch
+```
+
+To display test coverage (for all tests, **includes test suite with authorization**)
+
+```
+npm run test:cov
+```
+
+### Linting with ESLint and formatting with Prettier
 
 ```
 npm run lint
@@ -65,8 +98,8 @@ npm run lint
 npm run format
 ```
 
-### Debugging in VSCode
+## API Endpoints
 
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+After starting the app on port (4000 as default) you can open
+in your browser OpenAPI documentation by typing http://localhost:4000/docs/.
+For more information about OpenAPI/Swagger please visit https://swagger.io/.

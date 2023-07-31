@@ -16,6 +16,15 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true,
+    "paths": {
+      "@album/*": ["src/album/*"],
+      "@artist/*": ["src/artist/*"],
+      "@favs/*": ["src/favs/*"],
+      "@shared/*": ["src/shared/*"],
+      "@track/*": ["src/track/*"],
+      "@user/*": ["src/user/*"]
+    }
   }
 }
