@@ -10,7 +10,7 @@ import {
   Post,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FavsService } from './favs.service';
 import { FavsResponseDto } from './dtos/favs-response.dto';
 import { UUID_VERSION } from '@shared/constants/uuid';
@@ -31,10 +31,13 @@ export class FavsController {
   }
 
   @Post('album/:id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
     example: '21d1e499-b101-43bf-aa68-42bc782ca0b2',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -64,10 +67,13 @@ export class FavsController {
 
   @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
     example: '652025d4-37cf-49f5-87a1-88e95774007d',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
@@ -92,10 +98,13 @@ export class FavsController {
   }
 
   @Post('artist/:id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'artist id (uuid v4)',
     example: '8abbc4b2-a0df-4eba-8384-f5077d0d6ed5',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -125,10 +134,13 @@ export class FavsController {
 
   @Delete('artist/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'artist id (uuid v4)',
     example: '8f62dd6d-db0c-4a93-85d0-850b2a55b8fd',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
@@ -153,10 +165,13 @@ export class FavsController {
   }
 
   @Post('track/:id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
     example: 'ba414b60-d562-4c80-af08-028d43b39f0a',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.CREATED,
@@ -186,10 +201,13 @@ export class FavsController {
 
   @Delete('track/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
     example: 'accb9d24-8192-419e-8e06-01071f90c0e2',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,

@@ -11,7 +11,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TrackResponseDto } from './dtos/track-response.dto';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackInfoDto } from './dtos/update-track-info.dto';
@@ -35,10 +35,13 @@ export class TrackController {
   }
 
   @Get(':id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
     example: '11035eda-0858-43bc-9ab7-9d4ba0da4e09',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -81,10 +84,13 @@ export class TrackController {
   }
 
   @Put(':id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
     example: '3a36a0e8-186e-4861-940b-12326e4f4691',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -115,10 +121,13 @@ export class TrackController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
     example: 'a7f382c5-a607-4cb4-be24-c2b669c1017d',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,

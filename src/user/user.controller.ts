@@ -12,7 +12,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
@@ -36,10 +36,13 @@ export class UserController {
   }
 
   @Get(':id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'user id (uuid v4)',
     example: 'e83cd69d-d1ef-4770-835e-5eb0537cc5c9',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -81,10 +84,13 @@ export class UserController {
   }
 
   @Put(':id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'user id (uuid v4)',
     example: 'e83cd69d-d1ef-4770-835e-5eb0537cc5c9',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -122,10 +128,13 @@ export class UserController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'user id (uuid v4)',
     example: 'e83cd69d-d1ef-4770-835e-5eb0537cc5c9',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,

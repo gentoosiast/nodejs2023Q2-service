@@ -40,10 +40,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: user id (uuid v4)
           example: e83cd69d-d1ef-4770-835e-5eb0537cc5c9
           schema:
+            format: uuid
             type: string
       responses:
         '200':
@@ -62,10 +63,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: user id (uuid v4)
           example: e83cd69d-d1ef-4770-835e-5eb0537cc5c9
           schema:
+            format: uuid
             type: string
       requestBody:
         required: true
@@ -92,10 +94,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: user id (uuid v4)
           example: e83cd69d-d1ef-4770-835e-5eb0537cc5c9
           schema:
+            format: uuid
             type: string
       responses:
         '204':
@@ -145,10 +148,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: artist id (uuid v4)
           example: 7b06da94-6e57-4641-8baa-6f6d975c70aa
           schema:
+            format: uuid
             type: string
       responses:
         '200':
@@ -167,10 +171,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: artist id (uuid v4)
           example: 70083ecc-00e2-45fd-b7fb-1a7b58eab45f
           schema:
+            format: uuid
             type: string
       requestBody:
         required: true
@@ -195,10 +200,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: artist id (uuid v4)
           example: 25f82d5b-e19f-405d-bafa-191930b0577b
           schema:
+            format: uuid
             type: string
       responses:
         '204':
@@ -250,10 +256,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: album id (uuid v4)
           example: 0a91b6a8-d1af-4556-80e0-f482e33232a0
           schema:
+            format: uuid
             type: string
       responses:
         '200':
@@ -272,10 +279,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: album id (uuid v4)
           example: ab00a15e-86c9-4ed1-84e0-3234eb315b2b
           schema:
+            format: uuid
             type: string
       requestBody:
         required: true
@@ -302,10 +310,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: album id (uuid v4)
           example: a868adda-61a6-4d4f-9ba9-43629fa73147
           schema:
+            format: uuid
             type: string
       responses:
         '204':
@@ -357,10 +366,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: track id (uuid v4)
           example: 11035eda-0858-43bc-9ab7-9d4ba0da4e09
           schema:
+            format: uuid
             type: string
       responses:
         '200':
@@ -379,10 +389,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: track id (uuid v4)
           example: 3a36a0e8-186e-4861-940b-12326e4f4691
           schema:
+            format: uuid
             type: string
       requestBody:
         required: true
@@ -409,10 +420,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: track id (uuid v4)
           example: a7f382c5-a607-4cb4-be24-c2b669c1017d
           schema:
+            format: uuid
             type: string
       responses:
         '204':
@@ -441,10 +453,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: album id (uuid v4)
           example: 21d1e499-b101-43bf-aa68-42bc782ca0b2
           schema:
+            format: uuid
             type: string
       responses:
         '201':
@@ -459,10 +472,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: album id (uuid v4)
           example: 652025d4-37cf-49f5-87a1-88e95774007d
           schema:
+            format: uuid
             type: string
       responses:
         '204':
@@ -478,10 +492,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: artist id (uuid v4)
           example: 8abbc4b2-a0df-4eba-8384-f5077d0d6ed5
           schema:
+            format: uuid
             type: string
       responses:
         '201':
@@ -496,10 +511,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: artist id (uuid v4)
           example: 8f62dd6d-db0c-4a93-85d0-850b2a55b8fd
           schema:
+            format: uuid
             type: string
       responses:
         '204':
@@ -515,10 +531,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: track id (uuid v4)
           example: ba414b60-d562-4c80-af08-028d43b39f0a
           schema:
+            format: uuid
             type: string
       responses:
         '201':
@@ -533,10 +550,11 @@ paths:
       parameters:
         - name: id
           required: true
-          in: query
+          in: path
           description: track id (uuid v4)
           example: accb9d24-8192-419e-8e06-01071f90c0e2
           schema:
+            format: uuid
             type: string
       responses:
         '204':

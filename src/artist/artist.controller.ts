@@ -11,7 +11,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ArtistService } from './artist.service';
 import { ArtistResponseDto } from './dtos/artist-response.dto';
 import { CreateArtistDto } from './dtos/create-artist.dto';
@@ -35,10 +35,13 @@ export class ArtistController {
   }
 
   @Get(':id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'artist id (uuid v4)',
     example: '7b06da94-6e57-4641-8baa-6f6d975c70aa',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -80,10 +83,13 @@ export class ArtistController {
   }
 
   @Put(':id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'artist id (uuid v4)',
     example: '70083ecc-00e2-45fd-b7fb-1a7b58eab45f',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -116,10 +122,13 @@ export class ArtistController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'artist id (uuid v4)',
     example: '25f82d5b-e19f-405d-bafa-191930b0577b',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,

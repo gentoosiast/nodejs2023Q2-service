@@ -11,7 +11,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AlbumResponseDto } from './dtos/album-response.dto';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumInfoDto } from './dtos/update-album-info.dto';
@@ -35,10 +35,13 @@ export class AlbumController {
   }
 
   @Get(':id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
     example: '0a91b6a8-d1af-4556-80e0-f482e33232a0',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -81,10 +84,13 @@ export class AlbumController {
   }
 
   @Put(':id')
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
     example: 'ab00a15e-86c9-4ed1-84e0-3234eb315b2b',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.OK,
@@ -115,10 +121,13 @@ export class AlbumController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiQuery({
+  @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
     example: 'a868adda-61a6-4d4f-9ba9-43629fa73147',
+    required: true,
+    type: 'string',
+    format: 'uuid',
   })
   @ApiResponse({
     status: HttpStatus.NO_CONTENT,
