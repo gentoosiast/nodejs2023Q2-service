@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import { UUIDService } from '@shared/services/uuid.service';
+import { FavsService } from '@favs/favs.service';
 import { InMemoryDbService } from '@shared/services/storage.service';
+import { TrackService } from '@track/track.service';
+import { UUIDService } from '@shared/services/uuid.service';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumInfoDto } from './dtos/update-album-info.dto';
 import { AlbumEntity } from './entities/album.entity';
@@ -11,7 +13,9 @@ import { UnknownIdException } from '@shared/exceptions/unknown-id.exception';
 @Injectable()
 export class AlbumService {
   constructor(
+    private readonly favsService: FavsService,
     private readonly inMemoryDbService: InMemoryDbService,
+    private readonly trackService: TrackService,
     private readonly uuidService: UUIDService,
   ) {}
 
@@ -51,18 +55,22 @@ export class AlbumService {
     return albums.map((album) => plainToClass(AlbumEntity, album));
   }
 
+  handleArtistRemoval(id: string): void {
+    this.inMemoryDbService.albums.forEach((album) => {
+      if (album.artistId === id) {
+        album.artistId = null;
+      }
+    });
+  }
+
   isExists(id: string): boolean {
     return this.inMemoryDbService.albums.has(id);
   }
 
   remove(id: string): boolean {
     if (this.inMemoryDbService.albums.has(id)) {
-      this.inMemoryDbService.favAlbums.delete(id);
-      this.inMemoryDbService.tracks.forEach((track) => {
-        if (track.albumId === id) {
-          track.albumId = null;
-        }
-      });
+      this.favsService.removeAlbum(id);
+      this.trackService.handleAlbumRemoval(id);
 
       return this.inMemoryDbService.albums.delete(id);
     }

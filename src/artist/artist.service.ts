@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
+import { AlbumService } from '@album/album.service';
+import { FavsService } from '@favs/favs.service';
 import { InMemoryDbService } from '@shared/services/storage.service';
+import { TrackService } from '@track/track.service';
 import { UUIDService } from '@shared/services/uuid.service';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistInfoDto } from './dtos/update-artist-info.dto';
@@ -10,7 +13,10 @@ import { Artist } from './interfaces/artist.interface';
 @Injectable()
 export class ArtistService {
   constructor(
+    private readonly albumService: AlbumService,
+    private readonly favsService: FavsService,
     private readonly inMemoryDbService: InMemoryDbService,
+    private readonly trackService: TrackService,
     private readonly uuidService: UUIDService,
   ) {}
 
@@ -49,20 +55,11 @@ export class ArtistService {
 
   remove(id: string): boolean {
     if (this.inMemoryDbService.artists.has(id)) {
-      this.inMemoryDbService.artists.delete(id);
-      this.inMemoryDbService.favArtists.delete(id);
-      this.inMemoryDbService.albums.forEach((album) => {
-        if (album.artistId === id) {
-          album.artistId = null;
-        }
-      });
-      this.inMemoryDbService.tracks.forEach((track) => {
-        if (track.artistId === id) {
-          track.artistId = null;
-        }
-      });
+      this.favsService.removeArtist(id);
+      this.albumService.handleArtistRemoval(id);
+      this.trackService.handleArtistRemoval(id);
 
-      return true;
+      return this.inMemoryDbService.artists.delete(id);
     }
 
     return false;

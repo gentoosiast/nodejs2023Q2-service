@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
+import { FavsService } from '@favs/favs.service';
 import { InMemoryDbService } from '@shared/services/storage.service';
 import { UUIDService } from '@shared/services/uuid.service';
 import { CreateTrackDto } from './dtos/create-track.dto';
@@ -11,7 +12,8 @@ import { UnknownIdException } from '@shared/exceptions/unknown-id.exception';
 @Injectable()
 export class TrackService {
   constructor(
-    private inMemoryDbService: InMemoryDbService,
+    private readonly favsService: FavsService,
+    private readonly inMemoryDbService: InMemoryDbService,
     private readonly uuidService: UUIDService,
   ) {}
 
@@ -58,12 +60,28 @@ export class TrackService {
     return tracks.map((track) => plainToClass(TrackEntity, track));
   }
 
+  handleAlbumRemoval(id: string): void {
+    this.inMemoryDbService.tracks.forEach((track) => {
+      if (track.albumId === id) {
+        track.albumId = null;
+      }
+    });
+  }
+
+  handleArtistRemoval(id: string): void {
+    this.inMemoryDbService.tracks.forEach((track) => {
+      if (track.artistId === id) {
+        track.artistId = null;
+      }
+    });
+  }
+
   isExists(id: string): boolean {
     return this.inMemoryDbService.tracks.has(id);
   }
 
   remove(id: string): boolean {
-    this.inMemoryDbService.favTracks.delete(id);
+    this.favsService.removeTrack(id);
 
     return this.inMemoryDbService.tracks.delete(id);
   }
