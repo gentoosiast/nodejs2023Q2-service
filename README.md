@@ -98,6 +98,14 @@ npm run lint
 npm run format
 ```
 
+### Docker
+
+Scanning image for vulnerabilities
+
+```
+npm run docker:scan
+```
+
 ## API Endpoints
 
 After starting the app on port (4000 as default) you can open
