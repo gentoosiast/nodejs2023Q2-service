@@ -12,6 +12,8 @@ RUN npm ci
 
 COPY --chown=node:node . .
 
+RUN npx prisma generate
+
 # build image for production
 
 FROM node:18-alpine AS build
