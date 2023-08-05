@@ -26,5 +26,12 @@
       "@track/*": ["src/track/*"],
       "@user/*": ["src/user/*"]
     }
+  },
+
+  "watchOptions": {
+    "watchFile": "dynamicprioritypolling",
+    "watchDirectory": "dynamicprioritypolling",
+    "fallbackPolling": "dynamicpriority",
+    "excludeDirectories": ["**/node_modules", "dist"]
   }
 }
