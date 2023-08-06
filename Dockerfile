@@ -6,13 +6,11 @@ USER node
 
 WORKDIR /usr/src/app
 
-COPY --chown=node:node package*.json ./
+COPY --chown=node:node prisma package*.json ./
 
-RUN npm ci
+RUN npm ci && npx prisma generate
 
 COPY --chown=node:node . .
-
-RUN npx prisma generate
 
 # build image for production
 
