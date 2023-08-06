@@ -30,8 +30,8 @@ export class TrackController {
     type: TrackResponseDto,
     isArray: true,
   })
-  findAll() {
-    return this.trackService.findAll();
+  async findAll() {
+    return await this.trackService.findAll();
   }
 
   @Get(':id')
@@ -56,10 +56,10 @@ export class TrackController {
     status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
-  findOne(
+  async findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const track = this.trackService.findOne(id);
+    const track = await this.trackService.findOne(id);
 
     if (!track) {
       throw new NotFoundException('Track not found');
@@ -79,8 +79,8 @@ export class TrackController {
     description:
       'Request body does not contain required fields or one of ids in DTO is invalid or points to non-existing entity',
   })
-  create(@Body() createTrackDto: CreateTrackDto) {
-    return this.trackService.create(createTrackDto);
+  async create(@Body() createTrackDto: CreateTrackDto) {
+    return await this.trackService.create(createTrackDto);
   }
 
   @Put(':id')
@@ -106,11 +106,14 @@ export class TrackController {
     status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
-  updateInfo(
+  async updateInfo(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
     @Body() updateTrackInfoDto: UpdateTrackInfoDto,
   ) {
-    const updatedTrack = this.trackService.updateInfo(id, updateTrackInfoDto);
+    const updatedTrack = await this.trackService.updateInfo(
+      id,
+      updateTrackInfoDto,
+    );
 
     if (!updatedTrack) {
       throw new NotFoundException('Track not found');
@@ -141,10 +144,10 @@ export class TrackController {
     status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
-  remove(
+  async remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const result = this.trackService.remove(id);
+    const result = await this.trackService.remove(id);
 
     if (!result) {
       throw new NotFoundException('Track not found');
