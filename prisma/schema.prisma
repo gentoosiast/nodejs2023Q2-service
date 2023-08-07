@@ -20,49 +20,49 @@ model User {
 }
 
 model Artist {
-  id            String       @id @default(uuid())
-  name          String
-  grammy        Boolean
-  albums        Album[]
-  tracks        Track[]
-  favToArtist   FavToArtist? @relation(fields: [favToArtistId], references: [id])
-  favToArtistId String?
+  id          String       @id @default(uuid())
+  name        String
+  grammy      Boolean
+  albums      Album[]
+  tracks      Track[]
+  ArtistOnFav ArtistOnFav?
 }
 
 model Album {
-  id           String      @id @default(uuid())
-  name         String
-  year         Int
-  artist       Artist?     @relation(fields: [artistId], references: [id], onDelete: SetNull)
-  artistId     String?     @unique
-  tracks       Track[]
-  favToAlbum   FavToAlbum? @relation(fields: [favToAlbumId], references: [id])
-  favToAlbumId String?
+  id         String      @id @default(uuid())
+  name       String
+  year       Int
+  artist     Artist?     @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  artistId   String?     @unique
+  tracks     Track[]
+  AlbumOnFav AlbumOnFav?
 }
 
 model Track {
-  id           String      @id @default(uuid())
-  name         String
-  artist       Artist?     @relation(fields: [artistId], references: [id], onDelete: SetNull)
-  artistId     String?     @unique
-  album        Album?      @relation(fields: [albumId], references: [id], onDelete: SetNull)
-  albumId      String?     @unique
-  duration     Int
-  favToTrack   FavToTrack? @relation(fields: [favToTrackId], references: [id], onDelete: Cascade)
-  favToTrackId String?
+  id         String      @id @default(uuid())
+  name       String
+  artist     Artist?     @relation(fields: [artistId], references: [id], onDelete: SetNull)
+  artistId   String?     @unique
+  album      Album?      @relation(fields: [albumId], references: [id], onDelete: SetNull)
+  albumId    String?     @unique
+  duration   Int
+  TrackOnFav TrackOnFav?
 }
 
-model FavToAlbum {
-  id     String  @id @default(uuid())
-  albums Album[]
+model AlbumOnFav {
+  id      String @id @default(uuid())
+  album   Album  @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  albumId String @unique
 }
 
-model FavToArtist {
-  id      String   @id @default(uuid())
-  artists Artist[]
+model ArtistOnFav {
+  id       String @id @default(uuid())
+  artist   Artist @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  artistId String @unique
 }
 
-model FavToTrack {
-  id     String  @id @default(uuid())
-  tracks Track[]
+model TrackOnFav {
+  id      String @id @default(uuid())
+  track   Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  trackId String @unique
 }
