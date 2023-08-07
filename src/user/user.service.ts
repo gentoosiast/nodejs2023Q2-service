@@ -47,10 +47,13 @@ export class UserService {
 
       return true;
     } catch (err) {
-      if (err instanceof Prisma.PrismaClientKnownRequestError) {
-        console.error(JSON.stringify(err));
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2025' // record not found
+      ) {
         return false;
       }
+
       throw err;
     }
   }
@@ -69,11 +72,22 @@ export class UserService {
       return UpdateUserPasswordError.WrongPassword;
     }
 
-    const updatedUser = await this.prismaService.user.update({
-      where: { id },
-      data: { version: user.version + 1, password: newPassword },
-    });
+    try {
+      const updatedUser = await this.prismaService.user.update({
+        where: { id },
+        data: { version: user.version + 1, password: newPassword },
+      });
 
-    return plainToClass(UserEntity, updatedUser);
+      return plainToClass(UserEntity, updatedUser);
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2025' // record not found
+      ) {
+        return UpdateUserPasswordError.UserNotFound;
+      }
+
+      throw err;
+    }
   }
 }
