@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 
 COPY --chown=node:node prisma package*.json ./
 
-RUN npm ci && npx prisma generate
+RUN npm ci && npx prisma generate && npm cache clean --force
 
 COPY --chown=node:node . .
 
