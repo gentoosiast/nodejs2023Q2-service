@@ -5,6 +5,7 @@ import { PrismaService } from '@shared/services/prisma.service';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackInfoDto } from './dtos/update-track-info.dto';
 import { TrackEntity } from './entities/track.entity';
+import { UnknownIdException } from '@shared/exceptions/unknown-id.exception';
 
 @Injectable()
 export class TrackService {
@@ -16,16 +17,32 @@ export class TrackService {
     artistId,
     albumId,
   }: CreateTrackDto): Promise<TrackEntity> {
-    const track = await this.prismaService.track.create({
-      data: {
-        name,
-        duration,
-        artist: artistId !== null ? { connect: { id: artistId } } : undefined,
-        album: albumId !== null ? { connect: { id: albumId } } : undefined,
-      },
-    });
+    try {
+      const track = await this.prismaService.track.create({
+        data: {
+          name,
+          duration,
+          artist: artistId !== null ? { connect: { id: artistId } } : undefined,
+          album: albumId !== null ? { connect: { id: albumId } } : undefined,
+        },
+      });
 
-    return plainToClass(TrackEntity, track);
+      return plainToClass(TrackEntity, track);
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2025' && // "An operation failed because it depends on one or more records that were required but not found. {cause}"
+        typeof err.meta.cause === 'string'
+      ) {
+        if (err.meta.cause.includes('Album')) {
+          throw new UnknownIdException('albumId');
+        } else if (err.meta.cause.includes('Artist')) {
+          throw new UnknownIdException('artistId');
+        }
+      }
+
+      throw err;
+    }
   }
 
   async findAll(): Promise<TrackEntity[]> {
@@ -78,11 +95,19 @@ export class TrackService {
 
       return plainToClass(TrackEntity, updatedTrack);
     } catch (err) {
+      console.error(JSON.stringify(err));
       if (
         err instanceof Prisma.PrismaClientKnownRequestError &&
-        err.code === 'P2025' // record not found
+        err.code === 'P2025' && // record not found
+        typeof err.meta.cause === 'string'
       ) {
-        return null;
+        if (err.meta.cause.includes('Album')) {
+          throw new UnknownIdException('albumId');
+        } else if (err.meta.cause.includes('Artist')) {
+          throw new UnknownIdException('artistId');
+        } else {
+          return null;
+        }
       }
 
       throw err;

@@ -5,15 +5,27 @@ import { PrismaService } from '@shared/services/prisma.service';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumInfoDto } from './dtos/update-album-info.dto';
 import { AlbumEntity } from './entities/album.entity';
+import { UnknownIdException } from '@shared/exceptions/unknown-id.exception';
 
 @Injectable()
 export class AlbumService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(albumDto: CreateAlbumDto): Promise<AlbumEntity> {
-    const album = await this.prismaService.album.create({ data: albumDto });
+    try {
+      const album = await this.prismaService.album.create({ data: albumDto });
 
-    return plainToClass(AlbumEntity, album);
+      return plainToClass(AlbumEntity, album);
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2003' // "Foreign key constraint failed on the field: {field_name}"
+      ) {
+        throw new UnknownIdException('artistId');
+      }
+
+      throw err;
+    }
   }
 
   async findAll(): Promise<AlbumEntity[]> {
@@ -61,13 +73,15 @@ export class AlbumService {
 
       return plainToClass(AlbumEntity, updatedAlbum);
     } catch (err) {
-      if (
-        err instanceof Prisma.PrismaClientKnownRequestError &&
-        err.code === 'P2025' // record not found
-      ) {
-        return null;
+      if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        if (err.code === 'P2025') {
+          // record not found
+          return null;
+        } else if (err.code === 'P2003') {
+          // "Foreign key constraint failed on the field: {field_name}"
+          throw new UnknownIdException('artistId');
+        }
       }
-
       throw err;
     }
   }
