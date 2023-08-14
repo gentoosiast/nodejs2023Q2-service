@@ -95,7 +95,6 @@ export class TrackService {
 
       return plainToClass(TrackEntity, updatedTrack);
     } catch (err) {
-      console.error(JSON.stringify(err));
       if (
         err instanceof Prisma.PrismaClientKnownRequestError &&
         err.code === 'P2025' && // record not found
