@@ -1,865 +1,892 @@
 openapi: 3.0.0
+paths:
+  /user:
+    get:
+      operationId: UserController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: Users have been successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponseDto'
+      tags: &ref_0
+        - user
+    post:
+      operationId: UserController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: The user has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDto'
+        '400':
+          description: Request body does not contain required fields
+      tags: *ref_0
+  /user/{id}:
+    get:
+      operationId: UserController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: user id (uuid v4)
+          example: e83cd69d-d1ef-4770-835e-5eb0537cc5c9
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: The user has been successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDto'
+        '400':
+          description: Provided user id is invalid (not uuid)
+        '404':
+          description: User with provided id was not found
+      tags: *ref_0
+    put:
+      operationId: UserController_updatePassword
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: user id (uuid v4)
+          example: e83cd69d-d1ef-4770-835e-5eb0537cc5c9
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePasswordDto'
+      responses:
+        '200':
+          description: User's password has been successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDto'
+        '400':
+          description: Provided user id is invalid (not uuid)
+        '403':
+          description: Provided user's password is wrong
+        '404':
+          description: User with provided id was not found
+      tags: *ref_0
+    delete:
+      operationId: UserController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: user id (uuid v4)
+          example: e83cd69d-d1ef-4770-835e-5eb0537cc5c9
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: User has been successfully deleted
+        '400':
+          description: Provided user id is invalid (not uuid)
+        '404':
+          description: User with provided id was not found
+      tags: *ref_0
+  /artist:
+    get:
+      operationId: ArtistController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: Artists have been successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ArtistResponseDto'
+      tags: &ref_1
+        - artist
+    post:
+      operationId: ArtistController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateArtistDto'
+      responses:
+        '201':
+          description: The artist has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistResponseDto'
+        '400':
+          description: Request body does not contain required fields
+      tags: *ref_1
+  /artist/{id}:
+    get:
+      operationId: ArtistController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: artist id (uuid v4)
+          example: 7b06da94-6e57-4641-8baa-6f6d975c70aa
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: The artist has been successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistResponseDto'
+        '400':
+          description: Provided id of artist is invalid (not uuid)
+        '404':
+          description: Artist with provided id was not found
+      tags: *ref_1
+    put:
+      operationId: ArtistController_updateInfo
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: artist id (uuid v4)
+          example: 70083ecc-00e2-45fd-b7fb-1a7b58eab45f
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateArtistInfoDto'
+      responses:
+        '200':
+          description: Artist's info has been successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArtistResponseDto'
+        '400':
+          description: Provided id of artist is invalid (not uuid)
+        '404':
+          description: Artist with provided id was not found
+      tags: *ref_1
+    delete:
+      operationId: ArtistController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: artist id (uuid v4)
+          example: 25f82d5b-e19f-405d-bafa-191930b0577b
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Artist has been successfully deleted
+        '400':
+          description: Provided id of artist is invalid (not uuid)
+        '404':
+          description: Artist with provided id was not found
+      tags: *ref_1
+  /album:
+    get:
+      operationId: AlbumController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: Albums have been successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlbumResponseDto'
+      tags: &ref_2
+        - album
+    post:
+      operationId: AlbumController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAlbumDto'
+      responses:
+        '201':
+          description: The album has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumResponseDto'
+        '400':
+          description: >-
+            Request body does not contain required fields or artistId in DTO is
+            invalid or points to non-existing entity
+      tags: *ref_2
+  /album/{id}:
+    get:
+      operationId: AlbumController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: album id (uuid v4)
+          example: 0a91b6a8-d1af-4556-80e0-f482e33232a0
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: The album has been successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumResponseDto'
+        '400':
+          description: Provided id of album is invalid (not uuid)
+        '404':
+          description: Album with provided id was not found
+      tags: *ref_2
+    put:
+      operationId: AlbumController_updateInfo
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: album id (uuid v4)
+          example: ab00a15e-86c9-4ed1-84e0-3234eb315b2b
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAlbumInfoDto'
+      responses:
+        '200':
+          description: Album's info has been successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlbumResponseDto'
+        '400':
+          description: >-
+            Provided id of album is invalid (not uuid) or artistId in DTO is
+            invalid or points to non-existing entity
+        '404':
+          description: Album with provided id was not found
+      tags: *ref_2
+    delete:
+      operationId: AlbumController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: album id (uuid v4)
+          example: a868adda-61a6-4d4f-9ba9-43629fa73147
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Album has been successfully deleted
+        '400':
+          description: Provided id of album is invalid (not uuid)
+        '404':
+          description: Album with provided id was not found
+      tags: *ref_2
+  /track:
+    get:
+      operationId: TrackController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: Tracks have been successfully retrieved
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TrackResponseDto'
+      tags: &ref_3
+        - track
+    post:
+      operationId: TrackController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTrackDto'
+      responses:
+        '201':
+          description: The track has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackResponseDto'
+        '400':
+          description: >-
+            Request body does not contain required fields or one of ids in DTO
+            is invalid or points to non-existing entity
+      tags: *ref_3
+  /track/{id}:
+    get:
+      operationId: TrackController_findOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: track id (uuid v4)
+          example: 11035eda-0858-43bc-9ab7-9d4ba0da4e09
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '200':
+          description: The track has been successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackResponseDto'
+        '400':
+          description: Provided id of track is invalid (not uuid)
+        '404':
+          description: Track with provided id was not found
+      tags: *ref_3
+    put:
+      operationId: TrackController_updateInfo
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: track id (uuid v4)
+          example: 3a36a0e8-186e-4861-940b-12326e4f4691
+          schema:
+            format: uuid
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTrackInfoDto'
+      responses:
+        '200':
+          description: Track's info has been successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackResponseDto'
+        '400':
+          description: >-
+            Provided id of track is invalid (not uuid) or one of ids in DTO is
+            invalid or points to non-existing entity
+        '404':
+          description: Track with provided id was not found
+      tags: *ref_3
+    delete:
+      operationId: TrackController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: track id (uuid v4)
+          example: a7f382c5-a607-4cb4-be24-c2b669c1017d
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Track has been successfully deleted
+        '400':
+          description: Provided id of track is invalid (not uuid)
+        '404':
+          description: Track with provided id was not found
+      tags: *ref_3
+  /favs:
+    get:
+      operationId: FavsController_findAll
+      parameters: []
+      responses:
+        '200':
+          description: Favorites have been successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavsResponseDto'
+      tags: &ref_4
+        - favs
+  /favs/album/{id}:
+    post:
+      operationId: FavsController_addAlbum
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: album id (uuid v4)
+          example: 21d1e499-b101-43bf-aa68-42bc782ca0b2
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '201':
+          description: The album has been successfully added to favorites
+        '400':
+          description: Provided id of album is invalid (not uuid)
+        '422':
+          description: Album with provided id was not found
+      tags: *ref_4
+    delete:
+      operationId: FavsController_removeAlbum
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: album id (uuid v4)
+          example: 652025d4-37cf-49f5-87a1-88e95774007d
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Album has been successfully deleted from the favorites
+        '400':
+          description: Provided id of album is invalid (not uuid)
+        '404':
+          description: Album with provided id was not found in the favorites
+      tags: *ref_4
+  /favs/artist/{id}:
+    post:
+      operationId: FavsController_addArtist
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: artist id (uuid v4)
+          example: 8abbc4b2-a0df-4eba-8384-f5077d0d6ed5
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '201':
+          description: The artist has been successfully added to favorites
+        '400':
+          description: Provided id of artist is invalid (not uuid)
+        '422':
+          description: Artist with provided id was not found
+      tags: *ref_4
+    delete:
+      operationId: FavsController_removeArtist
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: artist id (uuid v4)
+          example: 8f62dd6d-db0c-4a93-85d0-850b2a55b8fd
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Artist has been successfully deleted from the favorites
+        '400':
+          description: Provided id of artist is invalid (not uuid)
+        '404':
+          description: Artist with provided id was not found in the favorites
+      tags: *ref_4
+  /favs/track/{id}:
+    post:
+      operationId: FavsController_addTrack
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: track id (uuid v4)
+          example: ba414b60-d562-4c80-af08-028d43b39f0a
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '201':
+          description: The track has been successfully added to favorites
+        '400':
+          description: Provided id of track is invalid (not uuid)
+        '422':
+          description: Track with provided id was not found
+      tags: *ref_4
+    delete:
+      operationId: FavsController_removeTrack
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: track id (uuid v4)
+          example: accb9d24-8192-419e-8e06-01071f90c0e2
+          schema:
+            format: uuid
+            type: string
+      responses:
+        '204':
+          description: Track has been successfully deleted from the favorites
+        '400':
+          description: Provided id of track is invalid (not uuid)
+        '404':
+          description: Track with provided id was not found in the favorites
+      tags: *ref_4
 info:
   title: Home Library Service
-  description: Home music library service
-  version: 1.0.0
-
-servers:
-  - url: /api
-
+  description: 'Home Library Service: RS School NodeJS 2023 Q2 - Week 6 Task'
+  version: 0.0.1
+  contact: {}
+tags: []
+servers: []
 components:
   schemas:
-    User:
+    UserResponseDto:
       type: object
       properties:
         id:
           type: string
-          format: uuid
+          description: user ID (uuid v4)
+          example: 83ef2c0c-967e-46bb-b748-6614bc99b7b4
         login:
           type: string
-          example: 'TestUser'
+          description: user login
+          example: johndoe
         version:
           type: number
+          minimum: 1
+          description: user version (integer number, increments on update)
           example: 1
-        createAt:
+        createdAt:
           type: number
-          example: 1655000000
-        updateAt:
+          description: timestamp of user creation
+          example: 1690366188813
+        updatedAt:
           type: number
-          example: 1655000000
+          description: timestamp of last user update
+          example: 1690366221355
       required:
         - id
         - login
-    Artist:
+        - version
+        - createdAt
+        - updatedAt
+    CreateUserDto:
+      type: object
+      properties:
+        login:
+          type: object
+          default: ''
+          description: user login
+          example: johndoe
+        password:
+          type: object
+          default: ''
+          description: user password
+          example: abracadabra
+      required:
+        - login
+        - password
+    UpdatePasswordDto:
+      type: object
+      properties:
+        oldPassword:
+          type: object
+          default: ''
+          description: old password of the user
+          example: abracadabra
+        newPassword:
+          type: object
+          default: ''
+          description: new password of the user
+          example: d@n*9QRe6KPE9uv7
+      required:
+        - oldPassword
+        - newPassword
+    ArtistResponseDto:
       type: object
       properties:
         id:
           type: string
-          format: uuid
+          description: artist ID (uuid v4)
+          example: 3606733e-3bea-489c-a045-afa6e63ac0b3
         name:
           type: string
-          example: 'Freddie Mercury'
+          description: artist name
+          example: Björk
         grammy:
           type: boolean
+          description: Does artist have Grammy awards?
+          example: true
+      required:
+        - id
+        - name
+        - grammy
+    CreateArtistDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: artist name
+          example: Moby
+        grammy:
+          type: boolean
+          description: Does artist have Grammy awards?
+          example: true
+      required:
+        - name
+        - grammy
+    UpdateArtistInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: artist name
+          example: Harry Styles
+        grammy:
+          type: boolean
+          description: Does artist have Grammy awards?
           example: false
       required:
-        - id
         - name
-    Album:
+        - grammy
+    AlbumResponseDto:
       type: object
       properties:
         id:
           type: string
-          format: uuid
+          description: album ID (uuid v4)
+          example: 51699c8f-26a0-493e-be62-8fe9d07c5a40
         name:
           type: string
-          example: 'Innuendo'
+          description: album name
+          example: Cropping the Aftermath
         year:
-          type: integer
-          example: 1991
+          type: number
+          minimum: 1
+          description: album year
+          example: 2020
         artistId:
           type: string
-          format: uuid
           nullable: true
+          description: ID of the artist who created this album (or null)
+          example: 48d89280-a918-4de6-8141-c34e9cf6283e
       required:
         - id
         - name
-    Track:
+        - year
+        - artistId
+    CreateAlbumDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: album name
+          example: In the Days of Jupiter
+        year:
+          type: number
+          minimum: 1
+          description: album year
+          example: 2010
+        artistId:
+          type: string
+          nullable: true
+          description: ID of the artist who created this album (or null)
+          example: 2dd25d8d-21af-40b1-a273-1f06026fc618
+      required:
+        - name
+        - year
+        - artistId
+    UpdateAlbumInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: album name
+          example: Weathering
+        year:
+          type: number
+          minimum: 1
+          description: album year
+          example: 2011
+        artistId:
+          type: string
+          nullable: true
+          description: ID of the artist who created this album (or null)
+          example: 5f800c90-e1f0-483e-ab8d-1efff5f904e7
+      required:
+        - name
+        - year
+        - artistId
+    TrackResponseDto:
       type: object
       properties:
         id:
           type: string
-          format: uuid
+          description: track ID (uuid v4)
+          example: c81e086c-2cd9-4a9f-a68e-fa6c92214d52
         name:
           type: string
-          example: The Show Must Go On
+          description: track name
+          example: Ghost Identifier
         artistId:
           type: string
-          format: uuid
           nullable: true
+          description: ID of the artist who created this track (or null)
+          example: 82e5e3a7-5f9a-4de4-9bfd-1398d3c0571e
         albumId:
           type: string
-          format: uuid
           nullable: true
+          description: ID of the album this track belongs to (or null)
+          example: 48d83402-b63c-4d23-abdf-43094e0d05b9
         duration:
-          type: integer
-          description: In seconds
-          example: 262
+          type: number
+          minimum: 1
+          description: track duration in seconds
+          example: 353
       required:
         - id
         - name
+        - artistId
+        - albumId
         - duration
-    Favorites:
+    CreateTrackDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: track name
+          example: An Imperfect System
+        artistId:
+          type: string
+          nullable: true
+          description: ID of the artist who created this track (or null)
+          example: d7733d90-6119-4347-95d2-ed85678a3e42
+        albumId:
+          type: string
+          nullable: true
+          description: ID of the album this track belongs to (or null)
+          example: bbf3d2ef-ed3c-4c5b-b156-9d9f2264c5a0
+        duration:
+          type: number
+          minimum: 1
+          description: track duration in seconds
+          example: 484
+      required:
+        - name
+        - artistId
+        - albumId
+        - duration
+    UpdateTrackInfoDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: track name
+          example: Mont Da Anaon
+        artistId:
+          type: string
+          nullable: true
+          description: ID of the artist who created this track (or null)
+          example: 39dd467c-f47c-4387-a181-f5323fdf907d
+        albumId:
+          type: string
+          nullable: true
+          description: ID of the album this track belongs to (or null)
+          example: ed42b070-738c-4c75-8acb-a7d79d537b38
+        duration:
+          type: number
+          minimum: 1
+          description: track duration in seconds
+          example: 350
+      required:
+        - name
+        - artistId
+        - albumId
+        - duration
+    FavsResponseDto:
       type: object
       properties:
         artists:
+          description: List of favorite artists
+          example:
+            - id: 65088521-629d-4008-b8d5-b8e6369c5df7
+              name: Carbon Based Lifeforms
+              grammy: false
+            - id: 1d232e76-dd4c-435a-9145-7368ae6dbad2
+              name: Gorillaz
+              grammy: true
           type: array
           items:
-            $ref: '#/components/schemas/Artist'
+            type: object
         albums:
+          description: List of favorite albums
+          example:
+            - id: e8c4f2c8-879a-43e2-b0a1-f149c7077194
+              name: Weathered
+              year: 2012
+              artistId: 4bb7f6e2-7b8c-450d-8636-09433144b3cd
+            - id: b265bb37-782f-4313-808e-dd5e43fb8476
+              name: Everything Else Has Gone Wrong
+              year: 2020
+              artistId: f73494f7-e368-4d2a-a6e0-bac6b0216739
           type: array
           items:
-            $ref: '#/components/schemas/Album'
+            type: object
         tracks:
+          description: List of favorite tracks
+          example:
+            - id: 1ee309c5-59cf-4932-8481-88a3f1708603
+              name: Nightcall
+              artistId: 46a07667-8470-4e94-a39e-291b4fd00f16
+              albumId: e379c5b4-9fad-4f47-b996-15551c320c07
+              duration: 258
+            - id: 93d36579-1381-484e-9dec-6115e94e0bca
+              name: Home By Now
+              artistId: a6b10a11-e2db-4f43-8e38-b12d9c5fe73c
+              albumId: c383f3f8-cef8-4b89-8436-640dc8700ed7
+              duration: 275
+            - id: b29e3a77-236d-40b8-90cf-581f70dc2886
+              name: Eat, Sleep, Wake (Nothing But You)
+              artistId: a7c4c51c-2463-484e-881b-2279bd5e75a2
+              albumId: 3441d199-0362-48cf-8b66-2a0940944092
+              duration: 220
           type: array
           items:
-            $ref: '#/components/schemas/Track'
-  responses:
-    UnauthorizedError:
-      description: Access token is missing or invalid
-  securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
-security:
-  - bearerAuth: []
-
-paths:
-  /login:
-    post:
-      tags:
-        - Login
-      security: []
-      summary: Login
-      description: Logins a user and returns a JWT-token
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              title: example
-              properties:
-                login:
-                  type: string
-                  description: Username
-                password:
-                  type: string
-                  description: Password
-              required:
-                - user
-                - login
-      responses:
-        200:
-          description: Successful login.
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                description: JWT Token
-        403:
-          description: Incorrect login or password
-  /signup:
-    post:
-      tags:
-        - Signup
-      security: [ ]
-      summary: Signup
-      description: Signup a user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              title: example
-              properties:
-                login:
-                  type: string
-                  minLength: 3
-                  maxLength: 255
-                  description: Username
-                password:
-                  type: string
-                  format: password
-                  pattern: ^[a-zA-Z0-9]{3,30}
-                  description: Password
-              required:
-                - login
-                - password
-      responses:
-        204:
-          description: Successful signup
-        400:
-          description: Bad request
-        409:
-          description: Conflict. Login already exists
-  /users:
-    get:
-      tags:
-        - Users
-      summary: Get all users
-      description: Gets all users
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/User'
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-    post:
-      tags:
-        - Users
-      summary: Create user
-      description: Creates a new user
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              title: example
-              properties:
-                login:
-                  type: string
-                  description: The user's login
-                password:
-                  type: string
-                  description: The user's password
-              required:
-                - login
-                - password
-      responses:
-        201:
-          description: The user has been created.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        400:
-          description: Bad request. body does not contain required fields
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-  /users/{userId}:
-    parameters:
-      - name: userId
-        in: path
-        required: true
-        schema:
-          type: string
-    get:
-      tags:
-        - Users
-      summary: Get single user by id
-      description: Get single user by id
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        400:
-          description: Bad request. userId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: User not found
-
-    put:
-      tags:
-        - Users
-      summary: Update a user's password
-      description: Updates a user's password by ID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              title: example
-              properties:
-                oldPassword:
-                  type: string
-                  description: The user's old password
-                newPassword:
-                  type: string
-                  description: The user's new password
-              required:
-                - oldPassword
-                - newPassword
-      responses:
-        200:
-          description: The user has been updated.
-          content:
-            application/json:
-              schema:
-                type: object
-                title: example
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  login:
-                    type: string
-                    example: TestUser
-                  version:
-                    type: integer
-                    example: 2
-                  createAt:
-                    type: integer
-                    example: 1655000000
-                  updateAt:
-                    type: integer
-                    example: 1655999999
-        400:
-          description: Bad request. userId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        403:
-          description: oldPassword is wrong
-        404:
-          description: User not found
-
-    delete:
-      tags:
-        - Users
-      summary: Delete user
-      description: Deletes user by ID.
-      responses:
-        204:
-          description: The user has been deleted
-        400:
-          description: Bad request. userId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: User not found
-  /tracks:
-    get:
-      tags:
-        - Track
-      summary: Get tracks list
-      description: Gets all library tracks list
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Track'
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-    post:
-      tags:
-        - Track
-      summary: Add new track
-      description: Add new track information
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                artistId:
-                  type: string
-                  format: uuid
-                albumId:
-                  type: string
-                  format: uuid
-                duration:
-                  type: integer
-                  description: In seconds
-              required:
-                - name
-                - duration
-      responses:
-        201:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Track'
-        400:
-          description: Bad request. body does not contain required fields
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-  /tracks/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    get:
-      tags:
-        - Track
-      summary: Get single track by id
-      description: Gets single track by id
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Track'
-        400:
-          description: Bad request. trackId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Track was not found.
-    put:
-      tags:
-        - Track
-      summary: Update track information
-      description: Update library track information by UUID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              title: example
-              properties:
-                name:
-                  type: string
-                  example: Bohemian Rhapsody
-                artistId:
-                  type: string
-                  format: uuid
-                  nullable: true
-                duration:
-                  type: integer
-                  description: In seconds
-                  example: 355
-                albumId:
-                  type: string
-                  format: uuid
-                  nullable: true
-              required:
-                - name
-                - duration
-      responses:
-        200:
-          description: The track has been updated.
-          content:
-            application/json:
-              schema:
-                type: object
-                title: example
-                properties:
-                  id:
-                    type: string
-                    format: uuid
-                  name:
-                    type: string
-                    example: Bohemian Rhapsody
-                  artistId:
-                    type: string
-                    format: uuid
-                    nullable: true
-                  duration:
-                    type: integer
-                    description: In seconds
-                    example: 355
-                  albumId:
-                    type: string
-                    format: uuid
-                    nullable: true
-        400:
-          description: Bad request. trackId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Track was not found.
-    delete:
-      tags:
-        - Track
-      summary: Delete track
-      description: Delete track from library
-      responses:
-        204:
-          description: Deleted successfully
-        400:
-          description: Bad request. trackId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Track was not found.
-  /albums:
-    get:
-      tags:
-        - Album
-      summary: Get albums list
-      description: Gets all library albums list
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Album'
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-    post:
-      tags:
-        - Album
-      summary: Add new album
-      description: Add new album information
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              title: example
-              properties:
-                name:
-                  type: string
-                year:
-                  type: integer
-                artistId:
-                  type: string
-                  format: uuid
-                  nullable: true
-              required:
-                - name
-                - year
-      responses:
-        201:
-          description: Album is created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Album'
-        400:
-          description: Bad request. body does not contain required fields
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-  /albums/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    get:
-      tags:
-        - Album
-      summary: Get single album by id
-      description: Gets single album by id
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Album'
-        400:
-          description: Bad request. albumId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Album was not found.
-    put:
-      tags:
-        - Album
-      summary: Update album information
-      description: Update library album information by UUID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              title: example
-              properties:
-                name:
-                  type: string
-                year:
-                  type: integer
-                artistId:
-                  type: string
-                  format: uuid
-                  nullable: true
-              required:
-                - name
-                - year
-      responses:
-        200:
-          description: The album has been updated.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Album'
-        400:
-          description: Bad request. albumId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Album was not found.
-    delete:
-      tags:
-        - Album
-      summary: Delete album
-      description: Delete album from library
-      responses:
-        204:
-          description: Deleted successfully
-        400:
-          description: Bad request. albumId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Album was not found.
-  /artists:
-    get:
-      tags:
-        - Artist
-      summary: Get all artists
-      description: Gets all artists
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Artist'
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-    post:
-      tags:
-        - Artist
-      summary: Add new artist
-      description: Add new artist
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                grammy:
-                  type: boolean
-              required:
-                - name
-                - grammy
-      responses:
-        201:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Artist'
-        400:
-          description: Bad request. body does not contain required fields
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-  /artists/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    get:
-      tags:
-        - Artist
-      summary: Get single artist by id
-      description: Get single artist by id
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Artist'
-        400:
-          description: Bad request. artistId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Artist was not found.
-    put:
-      tags:
-        - Artist
-      summary: Update artist information
-      description: Update artist information by UUID
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                grammy:
-                  type: boolean
-              required:
-                - name
-                - grammy
-      responses:
-        200:
-          description: The artist has been updated.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Artist'
-        400:
-          description: Bad request. artistId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Artist was not found.
-    delete:
-      tags:
-        - Artist
-      summary: Delete artist
-      description: Delete artist from library
-      responses:
-        204:
-          description: Deleted successfully
-        400:
-          description: Bad request. artistId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Artist was not found.
-  /favs:
-    get:
-      tags:
-        - Favorites
-      summary: Get all favorites
-      description: Gets all favorites movies, tracks and books
-      responses:
-        200:
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Favorites'
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-  /favs/track/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    post:
-      tags:
-        - Favorites
-      summary: Add track to the favorites
-      description: Add track to the favorites
-      responses:
-        201:
-          description: Added successfully
-        400:
-          description: Bad. trackId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        422:
-          description: Track with id doesn't exist.
-    delete:
-      tags:
-        - Favorites
-      summary: Delete track from favorites
-      description: Delete track from favorites
-      responses:
-        204:
-          description: Deleted successfully
-        400:
-          description: Bad. trackId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Track was not found.
-  /favs/album/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    post:
-      tags:
-        - Favorites
-      summary: Add album to the favorites
-      description: Add album to the favorites
-      responses:
-        201:
-          description: Added successfully
-        400:
-          description: Bad. albumId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        422:
-          description: Album with id doesn't exist.
-    delete:
-      tags:
-        - Favorites
-      summary: Delete album from favorites
-      description: Delete album from favorites
-      responses:
-        204:
-          description: Deleted successfully
-        400:
-          description: Bad. albumId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Album was not found.
-  /favs/artist/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-          format: uuid
-    post:
-      tags:
-        - Favorites
-      summary: Add artist to the favorites
-      description: Add artist to the favorites
-      responses:
-        201:
-          description: Added successfully
-        400:
-          description: Bad request. artistId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        422:
-          description: Artist with id doesn't exist.
-    delete:
-      tags:
-        - Favorites
-      summary: Delete artist from favorites
-      description: Delete artist from favorites
-      responses:
-        204:
-          description: Deleted successfully
-        400:
-          description: Bad request. artistId is invalid (not uuid)
-        401:
-          $ref: '#/components/responses/UnauthorizedError'
-        404:
-          description: Artist was not found.
+            type: object
+      required:
+        - artists
+        - albums
+        - tracks

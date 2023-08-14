@@ -1,0 +1,52 @@
+version: '3'
+services:
+  api:
+    container_name: 'nodejs2023q2-hls-api'
+    image: gentoosiast/hls:api
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    networks:
+      - hlsnet
+    volumes:
+      - ./src:/usr/src/app/src
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${PGPORT}/${POSTGRES_DB}?schema=public
+    command: npm run start:dev
+    ports:
+      - ${PORT}:${PORT}
+    restart: always
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: 'nodejs2023q2-hls-db'
+    image: gentoosiast/hls:db
+    build:
+      dockerfile: Dockerfile
+      context: ./database
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - PGPORT=${PGPORT}
+    ports:
+      - ${PGPORT}:${PGPORT}
+    networks:
+      - hlsnet
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    restart: always
+
+networks:
+  hlsnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: ${CUSTOM_NETWORK_SUBNET}
+
+volumes:
+  postgres:
