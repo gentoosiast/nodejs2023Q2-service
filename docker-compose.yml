@@ -30,8 +30,9 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
+      - PGPORT=${PGPORT}
     ports:
-      - ${POSTGRES_PORT}:5432
+      - ${PGPORT}:${PGPORT}
     networks:
       - hlsnet
     volumes:
@@ -43,7 +44,7 @@ networks:
     driver: bridge
     ipam:
       config:
-        - subnet: 172.28.0.0/16
+        - subnet: ${CUSTOM_NETWORK_SUBNET}
 
 volumes:
   postgres:
