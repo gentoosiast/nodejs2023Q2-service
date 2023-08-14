@@ -22,7 +22,7 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
 
 6. Run `docker compose up -d` and wait until images are created & containers are started. You can check status of containers with `docker ps`
 
-7. Run Prisma ORM migrations inside Docker container: `npm run docker:prisma:migrate:dev`
+7. Run Prisma ORM migrations: `npm run prisma:migrate:dev`
 
 8. Everything should be ready and now you can run tests with `npm t` and check final size of application image with `docker images`
 

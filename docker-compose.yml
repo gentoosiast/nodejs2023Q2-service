@@ -13,6 +13,8 @@ services:
       - ./src:/usr/src/app/src
     env_file:
       - .env
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${PGPORT}/${POSTGRES_DB}?schema=public
     command: npm run start:dev
     ports:
       - ${PORT}:${PORT}
