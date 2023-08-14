@@ -1,18 +1,44 @@
 # Home Library Service
 
-RS School NodeJS 2023 Q2 - Week 6 Task
+RS School NodeJS 2023 Q2 - Weeks 6-8 Task
+
+Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload support for files in `src/` folder
 
 `Users` can create, read, update, delete data about `Artists`, `Tracks` and `Albums`, add them to `Favorites` in their own Home Library!
 
 ## Installation
 
-**IMPORTANT**: Use Node.js LTS version (18.17.0 at the time of writing)
+**IMPORTANT**: Use Node.js LTS version (18.17.1 at the time of writing)
 
-Clone this repository
+1. Clone this repository
 
-Install all dependencies with `npm install`
+2. Switch to `feature/docker-orm` branch: `git switch feature/docker-orm`
 
-Create `.env` config using `.env.example` as reference.
+3. Install all project dependencies with `npm install`
+
+4. Create `.env` config using `.env.example` as reference
+
+5. Start _Docker Desktop_ (only if you are MS Windows user, otherwise skip this step)
+
+6. Run `docker compose up -d` and wait until images are created & containers are started. You can check status of containers with `docker ps`
+
+7. Run Prisma ORM migrations inside Docker container: `npm run docker:prisma:migrate:dev`
+
+8. Everything should be ready and now you can run tests with `npm t` and check final size of application image with `docker images`
+
+## Available .env settings
+
+- `PORT` - port number on which Home Library Service API will run in container and will be accessible outside
+- `JWT_SECRET_KEY` - Not used yet, will be implemented in part 3 of Home Library Service task assignment
+- `JWT_SECRET_REFRESH_KEY` - Not used yet, will be implemented in part 3 of Home Library Service task assignment
+- `TOKEN_EXPIRE_TIME` - Not used yet, will be implemented in part 3 of Home Library Service task assignment
+- `TOKEN_REFRESH_EXPIRE_TIME` - Not used yet, will be implemented in part 3 of Home Library Service task assignment
+- `CUSTOM_NETWORK_SUBNET` - Subnet in CIDR format that represents a network segment used by custom network. **NOTE:** if you change this setting, you will also need to change `./database/pg_hba.conf` to be able to use GUI database manager such as `pgAdmin` to connect to the database running in the container
+- `PGPORT` - port number on which PostgreSQL will run in container and will be accessible outside
+- `POSTGRES_USER` - login of superuser which will be created when you start PostgreSQL container the first time
+- `POSTGRES_PASSWORD` - password of superuser specified by `POSTGRES_USER` environment variable
+- `POSTGRES_DB` - default database that is created when the image is first started
+- `DATABASE_URL` - connection URL of Prisma ORM <https://www.prisma.io/docs/reference/database-reference/connection-urls#env>
 
 ## Provided NPM scripts
 
@@ -98,12 +124,50 @@ npm run lint
 npm run format
 ```
 
+### Prisma ORM
+
+To generate assets like `Prisma Client` based on the generator and data model blocks defined in your `prisma/schema.prisma` file
+
+```
+npm run prisma:generate
+```
+
+To apply all pending migrations, and create the database if it does not exist. Primarily used in non-development environments
+
+```
+npm run prisma:migrate
+```
+
+To apply all migrations, then create and apply any new migrations. For use in development environments only
+
+```
+npm run prisma:migrate:dev
+```
+
 ### Docker
 
-Scanning image for vulnerabilities
+To scan images for vulnerabilities
 
 ```
 npm run docker:scan
+```
+
+Same as `prisma:generate` script, but will run inside the Docker container
+
+```
+npm run docker:prisma:generate
+```
+
+Same as `prisma:migrate` script, but will run inside the Docker container
+
+```
+npm run docker:prisma:migrate
+```
+
+Same as `prisma:migrate:dev` script, but will run inside the Docker container
+
+```
+npm run docker:prisma:migrate:dev
 ```
 
 ## API Endpoints
