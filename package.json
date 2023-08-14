@@ -22,7 +22,7 @@
     "docker:prisma:generate": "docker exec nodejs2023q2-hls-api npm run prisma:generate",
     "docker:prisma:migrate": "docker exec nodejs2023q2-hls-api npm run prisma:migrate",
     "docker:prisma:migrate:dev": "docker exec nodejs2023q2-hls-api npm run prisma:migrate:dev",
-    "docker:scan": "docker scout cves gentoosiast/hls-api && docker scout cves gentoosiast/hls-db",
+    "docker:scan": "docker scout cves gentoosiast/hls:api && docker scout cves gentoosiast/hls:db",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:migrate:dev": "prisma migrate dev"
