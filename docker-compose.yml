@@ -2,7 +2,7 @@ version: '3'
 services:
   api:
     container_name: 'nodejs2023q2-hls-api'
-    image: gentoosiast/hls-api
+    image: gentoosiast/hls:api
     build:
       dockerfile: Dockerfile
       context: .
@@ -24,7 +24,7 @@ services:
 
   postgres:
     container_name: 'nodejs2023q2-hls-db'
-    image: gentoosiast/hls-db
+    image: gentoosiast/hls:db
     build:
       dockerfile: Dockerfile
       context: ./database
