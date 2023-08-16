@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   ForbiddenException,
+  HttpCode,
   HttpStatus,
   Post,
 } from '@nestjs/common';
@@ -34,6 +35,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   @SkipAuth()
   @ApiResponse({
     status: HttpStatus.OK,
