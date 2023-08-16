@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 import { UserService } from '@user/user.service';
 import { CreateUserDto } from '@user/dtos/create-user.dto';
 import { UserEntity } from '@user/entities/user.entity';
@@ -15,6 +15,7 @@ import {
 export class AuthService {
   constructor(
     private readonly configService: ConfigService<EnvironmentVariables>,
+    private readonly jwtService: JwtService,
     private readonly userService: UserService,
   ) {}
 
@@ -62,41 +63,18 @@ export class AuthService {
       throw new Error('JWT_SECRET_REFRESH_KEY not found in environment');
     }
 
-    const accessTokenPromise = this.createJWTSignPromise(
+    const accessToken = await this.jwtService.signAsync(
       { sub: user.id },
-      accessSecret,
-      accessExpireTime,
+      { secret: accessSecret, expiresIn: accessExpireTime },
     );
-    const refreshTokenPromise = this.createJWTSignPromise(
+    const refreshToken = await this.jwtService.signAsync(
       { sub: user.id },
-      refreshSecret,
-      refreshExpireTime,
+      { secret: refreshSecret, expiresIn: refreshExpireTime },
     );
-
-    const [accessToken, refreshToken] = await Promise.all([
-      accessTokenPromise,
-      refreshTokenPromise,
-    ]);
 
     return {
       accessToken,
       refreshToken,
     };
-  }
-
-  private async createJWTSignPromise(
-    payload: string | Buffer | object,
-    secret: jwt.Secret,
-    expiresIn: number | string,
-  ): Promise<string> {
-    return new Promise((res, rej) => {
-      jwt.sign(payload, secret, { expiresIn }, (err, token) => {
-        if (err) {
-          rej(err);
-        }
-
-        res(token);
-      });
-    });
   }
 }
