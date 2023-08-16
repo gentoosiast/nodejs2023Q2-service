@@ -28,7 +28,6 @@ export class UserService {
       DEFAULT_SALT_ROUNDS,
       { infer: true },
     );
-    console.log(typeof saltRounds);
     const passwordHash = await bcrypt.hash(password, saltRounds);
 
     const user = await this.prismaService.user.create({
