@@ -8,6 +8,7 @@ import { AlbumModule } from './album/album.module';
 import { TrackModule } from './track/track.module';
 import { FavsModule } from './favs/favs.module';
 import { SharedModule } from './shared/shared.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { SharedModule } from './shared/shared.module';
     TrackModule,
     FavsModule,
     SharedModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
