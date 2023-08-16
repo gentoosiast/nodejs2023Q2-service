@@ -1,10 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
+import * as bcrypt from 'bcrypt';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '@shared/services/prisma.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserEntity } from './entities/user.entity';
-import { Prisma } from '@prisma/client';
+import { EnvironmentVariables } from '@shared/intefaces/env-config';
+import { DEFAULT_SALT_ROUNDS } from './constants';
 
 export enum UpdateUserPasswordError {
   WrongPassword,
@@ -13,11 +17,22 @@ export enum UpdateUserPasswordError {
 
 @Injectable()
 export class UserService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly configService: ConfigService<EnvironmentVariables>,
+    private readonly prismaService: PrismaService,
+  ) {}
 
-  async create(userDto: CreateUserDto): Promise<UserEntity> {
+  async create({ login, password }: CreateUserDto): Promise<UserEntity> {
+    const saltRounds = +this.configService.get(
+      'CRYPT_SALT',
+      DEFAULT_SALT_ROUNDS,
+      { infer: true },
+    );
+    console.log(typeof saltRounds);
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
     const user = await this.prismaService.user.create({
-      data: userDto,
+      data: { login, password: passwordHash },
     });
 
     return plainToClass(UserEntity, user);
@@ -80,7 +95,8 @@ export class UserService {
       return UpdateUserPasswordError.UserNotFound;
     }
 
-    if (user.password !== oldPassword) {
+    const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordCorrect) {
       return UpdateUserPasswordError.WrongPassword;
     }
 
@@ -110,6 +126,8 @@ export class UserService {
       return false;
     }
 
-    return user.password === password;
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    return isPasswordCorrect;
   }
 }
