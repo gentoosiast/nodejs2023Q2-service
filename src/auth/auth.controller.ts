@@ -11,6 +11,7 @@ import { CreateUserDto } from '@user/dtos/create-user.dto';
 import { LoginResponseDto } from './dtos/login-response.dto';
 import { UserResponseDto } from '@user/dtos/user-response.dto';
 import { UserEntity } from '@user/entities/user.entity';
+import { SkipAuth } from '@shared/decorators/public';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -18,6 +19,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
+  @SkipAuth()
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'The user has been successfully created',
@@ -32,6 +34,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @SkipAuth()
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successful login with provided login and password',
@@ -56,5 +59,6 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @SkipAuth()
   async refresh() {}
 }
