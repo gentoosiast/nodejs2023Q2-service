@@ -5,11 +5,16 @@ import { UserService } from '@user/user.service';
 import { CreateUserDto } from '@user/dtos/create-user.dto';
 import { UserEntity } from '@user/entities/user.entity';
 import { LoginResponseDto } from './dtos/login-response.dto';
+import { EnvironmentVariables } from '@shared/intefaces/env-config';
+import {
+  DEFAULT_TOKEN_EXPIRE_TIME,
+  DEFAULT_TOKEN_REFRESH_EXPIRE_TIME,
+} from './constants';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly configService: ConfigService,
+    private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly userService: UserService,
   ) {}
 
@@ -33,15 +38,29 @@ export class AuthService {
       return null;
     }
 
-    const accessSecret = this.configService.get<string>('JWT_SECRET_KEY');
-    const accessExpireTime =
-      this.configService.get<string>('TOKEN_EXPIRE_TIME');
-    const refreshSecret = this.configService.get<string>(
-      'JWT_SECRET_REFRESH_KEY',
+    const accessExpireTime = this.configService.get(
+      'TOKEN_EXPIRE_TIME',
+      DEFAULT_TOKEN_EXPIRE_TIME,
+      { infer: true },
     );
-    const refreshExpireTime = this.configService.get<string>(
+    const refreshExpireTime = this.configService.get(
       'TOKEN_REFRESH_EXPIRE_TIME',
+      DEFAULT_TOKEN_REFRESH_EXPIRE_TIME,
+      { infer: true },
     );
+    const accessSecret = this.configService.get('JWT_SECRET_KEY', {
+      infer: true,
+    });
+    if (!accessSecret) {
+      throw new Error('JWT_SECRET_KEY not found in environment');
+    }
+
+    const refreshSecret = this.configService.get('JWT_SECRET_REFRESH_KEY', {
+      infer: true,
+    });
+    if (!refreshSecret) {
+      throw new Error('JWT_SECRET_REFRESH_KEY not found in environment');
+    }
 
     const accessTokenPromise = this.createJWTSignPromise(
       { sub: user.id },
