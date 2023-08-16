@@ -6,12 +6,13 @@ import { AppModule } from './app.module';
 import { DEFAULT_PORT } from './shared/constants/env';
 import { description, version as appVersion } from 'package.json';
 import { GlobalExceptionFilter } from '@shared/filters/global/global-exception.filter';
+import { EnvironmentVariables } from '@shared/intefaces/env-config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
-  const configService = app.get(ConfigService);
-  const port = configService.get<number>('PORT') ?? DEFAULT_PORT;
+  const configService = app.get(ConfigService<EnvironmentVariables>);
+  const port = +configService.get('PORT', { infer: true }) ?? DEFAULT_PORT;
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Home Library Service')
     .setDescription(description)
