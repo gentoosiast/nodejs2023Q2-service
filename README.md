@@ -29,10 +29,11 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
 ## Available .env settings
 
 - `PORT` - port number on which Home Library Service API will run in container and will be accessible outside
-- `JWT_SECRET_KEY` - Not used yet, will be implemented in part 3 of Home Library Service task assignment
-- `JWT_SECRET_REFRESH_KEY` - Not used yet, will be implemented in part 3 of Home Library Service task assignment
-- `TOKEN_EXPIRE_TIME` - Not used yet, will be implemented in part 3 of Home Library Service task assignment
-- `TOKEN_REFRESH_EXPIRE_TIME` - Not used yet, will be implemented in part 3 of Home Library Service task assignment
+- `CRYPT_SALT` - number of rounds for salt creation (used to hash the passwords), the cost of processing the data
+- `JWT_SECRET_KEY` - secret key used to sign the access token
+- `JWT_SECRET_REFRESH_KEY` - secret key used to sign the refresh token
+- `TOKEN_EXPIRE_TIME` - expiration time of access token (expressed in seconds or a string describing a time span [vercel/ms](https://github.com/vercel/ms))
+- `TOKEN_REFRESH_EXPIRE_TIME` - expiration time of refresh token (expressed in seconds or a string describing a time span [vercel/ms](https://github.com/vercel/ms))
 - `CUSTOM_NETWORK_SUBNET` - Subnet in CIDR format that represents a network segment used by custom network. **NOTE:** if you change this setting, you will also need to change `./database/pg_hba.conf` to be able to use GUI database manager such as `pgAdmin` to connect to the database running in the container
 - `PGPORT` - port number on which PostgreSQL will run in container and will be accessible outside
 - `POSTGRES_USER` - login of superuser which will be created when you start PostgreSQL container the first time
