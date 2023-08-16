@@ -3,8 +3,8 @@ export interface EnvironmentVariables {
   CRYPT_SALT: number;
   JWT_SECRET_KEY: string;
   JWT_SECRET_REFRESH_KEY: string;
-  TOKEN_EXPIRE_TIME: string;
-  TOKEN_REFRESH_EXPIRE_TIME: string;
+  TOKEN_EXPIRE_TIME: string | number;
+  TOKEN_REFRESH_EXPIRE_TIME: string | number;
   CUSTOM_NETWORK_SUBNET: string;
   PGPORT: number;
   POSTGRES_USER: string;
