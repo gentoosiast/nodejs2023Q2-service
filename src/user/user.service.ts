@@ -41,6 +41,18 @@ export class UserService {
     return plainToClass(UserEntity, user);
   }
 
+  async findOneByLogin(login: string): Promise<UserEntity | null> {
+    const user = await this.prismaService.user.findUnique({
+      where: { login },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return plainToClass(UserEntity, user);
+  }
+
   async remove(id: string): Promise<boolean> {
     try {
       await this.prismaService.user.delete({ where: { id } });
@@ -89,5 +101,15 @@ export class UserService {
 
       throw err;
     }
+  }
+
+  async verifyPassword(id: string, password: string): Promise<boolean> {
+    const user = await this.prismaService.user.findUnique({ where: { id } });
+
+    if (!user) {
+      return false;
+    }
+
+    return user.password === password;
   }
 }
