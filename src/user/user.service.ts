@@ -99,10 +99,17 @@ export class UserService {
       return UpdateUserPasswordError.WrongPassword;
     }
 
+    const saltRounds = +this.configService.get(
+      'CRYPT_SALT',
+      DEFAULT_SALT_ROUNDS,
+      { infer: true },
+    );
+    const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
+
     try {
       const updatedUser = await this.prismaService.user.update({
         where: { id },
-        data: { version: user.version + 1, password: newPassword },
+        data: { version: user.version + 1, password: newPasswordHash },
       });
 
       return plainToClass(UserEntity, updatedUser);
