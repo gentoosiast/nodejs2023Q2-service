@@ -11,7 +11,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ArtistService } from './artist.service';
 import { ArtistResponseDto } from './dtos/artist-response.dto';
 import { CreateArtistDto } from './dtos/create-artist.dto';
@@ -19,6 +19,7 @@ import { UpdateArtistInfoDto } from './dtos/update-artist-info.dto';
 import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('artist')
+@ApiBearerAuth()
 @Controller('artist')
 export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}

@@ -15,6 +15,8 @@ paths:
                   $ref: '#/components/schemas/UserResponseDto'
       tags: &ref_0
         - user
+      security: &ref_1
+        - bearer: []
     post:
       operationId: UserController_create
       parameters: []
@@ -34,6 +36,7 @@ paths:
         '400':
           description: Request body does not contain required fields
       tags: *ref_0
+      security: *ref_1
   /user/{id}:
     get:
       operationId: UserController_findOne
@@ -58,6 +61,7 @@ paths:
         '404':
           description: User with provided id was not found
       tags: *ref_0
+      security: *ref_1
     put:
       operationId: UserController_updatePassword
       parameters:
@@ -89,6 +93,7 @@ paths:
         '404':
           description: User with provided id was not found
       tags: *ref_0
+      security: *ref_1
     delete:
       operationId: UserController_remove
       parameters:
@@ -108,6 +113,7 @@ paths:
         '404':
           description: User with provided id was not found
       tags: *ref_0
+      security: *ref_1
   /artist:
     get:
       operationId: ArtistController_findAll
@@ -121,8 +127,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ArtistResponseDto'
-      tags: &ref_1
+      tags: &ref_2
         - artist
+      security: &ref_3
+        - bearer: []
     post:
       operationId: ArtistController_create
       parameters: []
@@ -141,7 +149,8 @@ paths:
                 $ref: '#/components/schemas/ArtistResponseDto'
         '400':
           description: Request body does not contain required fields
-      tags: *ref_1
+      tags: *ref_2
+      security: *ref_3
   /artist/{id}:
     get:
       operationId: ArtistController_findOne
@@ -165,7 +174,8 @@ paths:
           description: Provided id of artist is invalid (not uuid)
         '404':
           description: Artist with provided id was not found
-      tags: *ref_1
+      tags: *ref_2
+      security: *ref_3
     put:
       operationId: ArtistController_updateInfo
       parameters:
@@ -194,7 +204,8 @@ paths:
           description: Provided id of artist is invalid (not uuid)
         '404':
           description: Artist with provided id was not found
-      tags: *ref_1
+      tags: *ref_2
+      security: *ref_3
     delete:
       operationId: ArtistController_remove
       parameters:
@@ -213,7 +224,8 @@ paths:
           description: Provided id of artist is invalid (not uuid)
         '404':
           description: Artist with provided id was not found
-      tags: *ref_1
+      tags: *ref_2
+      security: *ref_3
   /album:
     get:
       operationId: AlbumController_findAll
@@ -227,8 +239,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/AlbumResponseDto'
-      tags: &ref_2
+      tags: &ref_4
         - album
+      security: &ref_5
+        - bearer: []
     post:
       operationId: AlbumController_create
       parameters: []
@@ -249,7 +263,8 @@ paths:
           description: >-
             Request body does not contain required fields or artistId in DTO is
             invalid or points to non-existing entity
-      tags: *ref_2
+      tags: *ref_4
+      security: *ref_5
   /album/{id}:
     get:
       operationId: AlbumController_findOne
@@ -273,7 +288,8 @@ paths:
           description: Provided id of album is invalid (not uuid)
         '404':
           description: Album with provided id was not found
-      tags: *ref_2
+      tags: *ref_4
+      security: *ref_5
     put:
       operationId: AlbumController_updateInfo
       parameters:
@@ -304,7 +320,8 @@ paths:
             invalid or points to non-existing entity
         '404':
           description: Album with provided id was not found
-      tags: *ref_2
+      tags: *ref_4
+      security: *ref_5
     delete:
       operationId: AlbumController_remove
       parameters:
@@ -323,7 +340,8 @@ paths:
           description: Provided id of album is invalid (not uuid)
         '404':
           description: Album with provided id was not found
-      tags: *ref_2
+      tags: *ref_4
+      security: *ref_5
   /track:
     get:
       operationId: TrackController_findAll
@@ -337,8 +355,10 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TrackResponseDto'
-      tags: &ref_3
+      tags: &ref_6
         - track
+      security: &ref_7
+        - bearer: []
     post:
       operationId: TrackController_create
       parameters: []
@@ -359,7 +379,8 @@ paths:
           description: >-
             Request body does not contain required fields or one of ids in DTO
             is invalid or points to non-existing entity
-      tags: *ref_3
+      tags: *ref_6
+      security: *ref_7
   /track/{id}:
     get:
       operationId: TrackController_findOne
@@ -383,7 +404,8 @@ paths:
           description: Provided id of track is invalid (not uuid)
         '404':
           description: Track with provided id was not found
-      tags: *ref_3
+      tags: *ref_6
+      security: *ref_7
     put:
       operationId: TrackController_updateInfo
       parameters:
@@ -414,7 +436,8 @@ paths:
             invalid or points to non-existing entity
         '404':
           description: Track with provided id was not found
-      tags: *ref_3
+      tags: *ref_6
+      security: *ref_7
     delete:
       operationId: TrackController_remove
       parameters:
@@ -433,7 +456,8 @@ paths:
           description: Provided id of track is invalid (not uuid)
         '404':
           description: Track with provided id was not found
-      tags: *ref_3
+      tags: *ref_6
+      security: *ref_7
   /favs:
     get:
       operationId: FavsController_findAll
@@ -445,8 +469,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FavsResponseDto'
-      tags: &ref_4
+      tags: &ref_8
         - favs
+      security: &ref_9
+        - bearer: []
   /favs/album/{id}:
     post:
       operationId: FavsController_addAlbum
@@ -466,7 +492,8 @@ paths:
           description: Provided id of album is invalid (not uuid)
         '422':
           description: Album with provided id was not found
-      tags: *ref_4
+      tags: *ref_8
+      security: *ref_9
     delete:
       operationId: FavsController_removeAlbum
       parameters:
@@ -485,7 +512,8 @@ paths:
           description: Provided id of album is invalid (not uuid)
         '404':
           description: Album with provided id was not found in the favorites
-      tags: *ref_4
+      tags: *ref_8
+      security: *ref_9
   /favs/artist/{id}:
     post:
       operationId: FavsController_addArtist
@@ -505,7 +533,8 @@ paths:
           description: Provided id of artist is invalid (not uuid)
         '422':
           description: Artist with provided id was not found
-      tags: *ref_4
+      tags: *ref_8
+      security: *ref_9
     delete:
       operationId: FavsController_removeArtist
       parameters:
@@ -524,7 +553,8 @@ paths:
           description: Provided id of artist is invalid (not uuid)
         '404':
           description: Artist with provided id was not found in the favorites
-      tags: *ref_4
+      tags: *ref_8
+      security: *ref_9
   /favs/track/{id}:
     post:
       operationId: FavsController_addTrack
@@ -544,7 +574,8 @@ paths:
           description: Provided id of track is invalid (not uuid)
         '422':
           description: Track with provided id was not found
-      tags: *ref_4
+      tags: *ref_8
+      security: *ref_9
     delete:
       operationId: FavsController_removeTrack
       parameters:
@@ -563,7 +594,79 @@ paths:
           description: Provided id of track is invalid (not uuid)
         '404':
           description: Track with provided id was not found in the favorites
-      tags: *ref_4
+      tags: *ref_8
+      security: *ref_9
+  /auth/signup:
+    post:
+      operationId: AuthController_signup
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '201':
+          description: The user has been successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponseDto'
+        '400':
+          description: Request body does not contain required fields
+      tags: &ref_10
+        - auth
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserDto'
+      responses:
+        '200':
+          description: Successful login with provided login and password
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponseDto'
+        '400':
+          description: DTO is invalid (no login or password, or they are not a strings)
+        '403':
+          description: Incorrect login or password
+      tags: *ref_10
+  /auth/refresh:
+    post:
+      operationId: AuthController_refresh
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenDto'
+      responses:
+        '200':
+          description: Successful refresh, new tokens issued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponseDto'
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponseDto'
+        '401':
+          description: DTO is invalid (no refreshToken in body)
+        '403':
+          description: Authentication failed (refresh token is invalid or expired)
+      tags: *ref_10
 info:
   title: Home Library Service
   description: 'Home Library Service: RS School NodeJS 2023 Q2 - Week 6 Task'
@@ -572,6 +675,11 @@ info:
 tags: []
 servers: []
 components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
   schemas:
     UserResponseDto:
       type: object
@@ -890,3 +998,29 @@ components:
         - artists
         - albums
         - tracks
+    TokenResponseDto:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: JWT access token
+          example: >-
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZmU4Y2VkNS1iNjc2LTQ1YTQtYWI5MC05ZGMwZjcyYjg0N2IiLCJpYXQiOjE2OTIxODI2MDUsImV4cCI6MTY5MjE4NjIwNX0.MvEHTBg1y1Vak4chpltrsxwqK7oCQcZYELD6EinIxWo
+        refreshToken:
+          type: string
+          description: JWT refresh token
+          example: >-
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzZmU4Y2VkNS1iNjc2LTQ1YTQtYWI5MC05ZGMwZjcyYjg0N2IiLCJpYXQiOjE2OTIxODI2MDUsImV4cCI6MTY5MjI2OTAwNX0.LUgxkI_Yd1UggbCKiW8MoZu2G8k-376eR5Qasg7roSg
+      required:
+        - accessToken
+        - refreshToken
+    RefreshTokenDto:
+      type: object
+      properties:
+        refreshToken:
+          type: string
+          description: JWT refresh token
+          example: >-
+            eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjNmRjOWE1Zi1mMGM2LTQ2YzctODZhZC0yMTQwYjQzZDViN2IiLCJpYXQiOjE2OTIxOTkwMzcsImV4cCI6MTY5MjI4NTQzN30.bwlNClmODzRgLJcCSP0Zr4pjYlfHMgKIK5o7C_9CUeg
+      required:
+        - refreshToken

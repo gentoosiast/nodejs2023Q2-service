@@ -11,7 +11,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { TrackResponseDto } from './dtos/track-response.dto';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackInfoDto } from './dtos/update-track-info.dto';
@@ -19,6 +19,7 @@ import { TrackService } from './track.service';
 import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('track')
+@ApiBearerAuth()
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}

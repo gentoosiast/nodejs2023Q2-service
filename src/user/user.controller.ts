@@ -12,7 +12,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
@@ -20,6 +20,7 @@ import { UpdateUserPasswordError, UserService } from './user.service';
 import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('user')
+@ApiBearerAuth()
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}

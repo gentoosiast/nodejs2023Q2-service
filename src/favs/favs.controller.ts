@@ -10,12 +10,13 @@ import {
   Post,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FavsService } from './favs.service';
 import { FavsResponseDto } from './dtos/favs-response.dto';
 import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('favs')
+@ApiBearerAuth()
 @Controller('favs')
 export class FavsController {
   constructor(private readonly favsService: FavsService) {}
