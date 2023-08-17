@@ -21,6 +21,7 @@
     "paths": {
       "@album/*": ["src/album/*"],
       "@artist/*": ["src/artist/*"],
+      "@auth/*": ["src/auth/*"],
       "@favs/*": ["src/favs/*"],
       "@shared/*": ["src/shared/*"],
       "@track/*": ["src/track/*"],
