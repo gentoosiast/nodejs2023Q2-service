@@ -5,8 +5,9 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '@user/dtos/create-user.dto';
 import { TokenResponseDto } from './dtos/token-response.dto';
@@ -14,6 +15,7 @@ import { RefreshTokenDto } from './dtos/refresh-token.dto';
 import { UserResponseDto } from '@user/dtos/user-response.dto';
 import { UserEntity } from '@user/entities/user.entity';
 import { SkipAuth } from '@shared/decorators/public';
+import { AuthRefreshGuard } from './auth-refresh.guard';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -63,7 +65,8 @@ export class AuthController {
   }
 
   @Post('refresh')
-  @SkipAuth()
+  @UseGuards(AuthRefreshGuard)
+  @ApiBearerAuth()
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successful refresh, new tokens issued',
@@ -71,11 +74,13 @@ export class AuthController {
   })
   @ApiResponse({
     status: HttpStatus.UNAUTHORIZED,
-    description: 'DTO is invalid (no refreshToken in body)',
+    description:
+      'DTO is invalid (no refreshToken in body) or no refresh token in the Authorization header',
   })
   @ApiResponse({
     status: HttpStatus.FORBIDDEN,
-    description: 'Authentication failed (refresh token is invalid or expired)',
+    description:
+      'Authentication failed (refresh token in the body is invalid or expired)',
   })
   async refresh(@Body() refreshTokenDto: RefreshTokenDto) {
     const response = await this.authService.refresh(refreshTokenDto);

@@ -663,10 +663,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/TokenResponseDto'
         '401':
-          description: DTO is invalid (no refreshToken in body)
+          description: >-
+            DTO is invalid (no refreshToken in body) or no refresh token in the
+            Authorization header
         '403':
-          description: Authentication failed (refresh token is invalid or expired)
+          description: >-
+            Authentication failed (refresh token in the body is invalid or
+            expired)
       tags: *ref_10
+      security:
+        - bearer: []
 info:
   title: Home Library Service
   description: 'Home Library Service: RS School NodeJS 2023 Q2 - Week 6 Task'
