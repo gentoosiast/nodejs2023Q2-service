@@ -11,4 +11,6 @@ export interface EnvironmentVariables {
   POSTGRES_PASSWORD: string;
   POSTGRES_DB: string;
   DATABASE_URL: string;
+  LOGGER_LOG_LEVEL: number;
+  LOGGER_MAX_FILE_SIZE: number;
 }

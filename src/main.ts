@@ -7,9 +7,12 @@ import { DEFAULT_PORT } from './shared/constants/env';
 import { description, version as appVersion } from 'package.json';
 import { GlobalExceptionFilter } from '@shared/filters/global/global-exception.filter';
 import { EnvironmentVariables } from '@shared/intefaces/env-config';
+import { LoggingService } from '@shared/services/custom-logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new LoggingService(new ConfigService()),
+  });
   app.enableCors();
   const configService = app.get(ConfigService<EnvironmentVariables>);
   const port = +configService.get('PORT', { infer: true }) ?? DEFAULT_PORT;
