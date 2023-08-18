@@ -11,7 +11,8 @@ import { LoggingService } from '@shared/services/custom-logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
-  app.useLogger(app.get(LoggingService));
+  const logger = app.get(LoggingService);
+  app.useLogger(logger);
   app.enableCors();
   const configService = app.get(ConfigService<EnvironmentVariables>);
   const port = +configService.get('PORT', { infer: true }) ?? DEFAULT_PORT;
@@ -26,6 +27,16 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useGlobalFilters(new GlobalExceptionFilter());
+
+  process.on('unhandledRejection', (err) => {
+    logger.error(`Unhandled Rejection: ${JSON.stringify(err)}`);
+  });
+
+  process.on('uncaughtException', (err) => {
+    const message = err instanceof Error ? err.message : JSON.stringify(err);
+    logger.error(`Uncaught Exception: ${message}`);
+  });
+
   await app.listen(port);
 }
 bootstrap();
