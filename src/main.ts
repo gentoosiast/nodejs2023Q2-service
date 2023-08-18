@@ -10,9 +10,8 @@ import { EnvironmentVariables } from '@shared/intefaces/env-config';
 import { LoggingService } from '@shared/services/custom-logger.service';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: new LoggingService(new ConfigService()),
-  });
+  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  app.useLogger(app.get(LoggingService));
   app.enableCors();
   const configService = app.get(ConfigService<EnvironmentVariables>);
   const port = +configService.get('PORT', { infer: true }) ?? DEFAULT_PORT;
