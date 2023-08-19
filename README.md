@@ -46,7 +46,7 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
   - `2 - log`
   - `3 - warn`
   - `4 - error`
-- `LOGGER_MAX_FILE_SIZE` - maximum log file size after which it will be rotated (in bytes)
+- `LOGGER_MAX_FILE_SIZE` - maximum log file size after which it will be rotated (in kB)
 
 ## Provided NPM scripts
 
