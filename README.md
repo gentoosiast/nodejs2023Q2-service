@@ -1,8 +1,8 @@
 # Home Library Service
 
-RS School NodeJS 2023 Q2 - Weeks 6-8 Task
+RS School NodeJS 2023 Q2 - Weeks 6-9 Task
 
-Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload support for files in `src/` folder
+Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload support for files in `src/` folder, with JWT authentication, and with custom logger
 
 `Users` can create, read, update, delete data about `Artists`, `Tracks` and `Albums`, add them to `Favorites` in their own Home Library!
 
@@ -12,7 +12,7 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
 
 1. Clone this repository
 
-2. Switch to `feature/docker-orm` branch: `git switch feature/docker-orm`
+2. Switch to `feature/jwt-logger-exception-filter` branch: `git switch feature/jwt-logger-exception-filter`
 
 3. Install all project dependencies with `npm install`
 
@@ -24,7 +24,7 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
 
 7. Run Prisma ORM migrations: `npm run prisma:migrate:dev`
 
-8. Everything should be ready and now you can run tests with `npm t` and check final size of application image with `docker images`
+8. Everything should be ready and now you can run authentication tests `npm run test:auth` and check out logs written by custom logger in `./logs/` folder
 
 ## Available .env settings
 
@@ -40,6 +40,13 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
 - `POSTGRES_PASSWORD` - password of superuser specified by `POSTGRES_USER` environment variable
 - `POSTGRES_DB` - default database that is created when the image is first started
 - `DATABASE_URL` - connection URL of Prisma ORM <https://www.prisma.io/docs/reference/database-reference/connection-urls#env>
+- `LOGGER_LOG_LEVEL` - log level. Available log levels:
+  - `0 - verbose`
+  - `1 - debug`
+  - `2 - log`
+  - `3 - warn`
+  - `4 - error`
+- `LOGGER_MAX_FILE_SIZE` - maximum log file size after which it will be rotated (in bytes)
 
 ## Provided NPM scripts
 
@@ -77,18 +84,6 @@ npm run build
 
 **After application is running open new terminal and enter:**
 
-To run all tests without authorization
-
-```
-npm run test
-```
-
-To run only specific test suite without authorization
-
-```
-npm run test -- <path to suite>
-```
-
 To run all test with authorization
 
 ```
@@ -97,10 +92,24 @@ npm run test:auth
 
 To run only specific test suite with authorization
 
-**NOTE: authorization will be implemented later, in 3rd part of this task assignment**
-
 ```
 npm run test:auth -- <path to suite>
+```
+
+To run all tests without authorization
+
+**NOTE: no longer works after authorization is implemented in 3rd part of assignment**
+
+```
+npm run test
+```
+
+To run only specific test suite without authorization
+
+**NOTE: no longer works after authorization is implemented in 3rd part of assignment**
+
+```
+npm run test -- <path to suite>
 ```
 
 To start Jest in watch mode
