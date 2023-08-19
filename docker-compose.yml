@@ -10,6 +10,7 @@ services:
     networks:
       - hlsnet
     volumes:
+      - ./logs:/usr/src/app/logs
       - ./src:/usr/src/app/src
     env_file:
       - .env
