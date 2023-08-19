@@ -5,12 +5,16 @@ import {
   HttpException,
   HttpExceptionBody,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { Response } from 'express';
+import * as os from 'node:os';
 import { UnknownIdException } from '@shared/exceptions/unknown-id.exception';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(GlobalExceptionFilter.name);
+
   catch(exception: Error, host: ArgumentsHost) {
     let body: HttpExceptionBody;
     let status: HttpStatus;
@@ -47,8 +51,18 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       };
       status = statusCode;
     }
+
+    const logMessage = `Exception: ${body.error} HTTP ${body.statusCode}${os.EOL}${body.message}`;
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
+
+    if (body.statusCode >= 500) {
+      this.logger.error(logMessage);
+    } else if (body.statusCode >= 400) {
+      this.logger.log(logMessage);
+    } else {
+      this.logger.debug(logMessage);
+    }
 
     response.status(status).json(body);
   }
