@@ -10,18 +10,26 @@ import * as fsPromises from 'node:fs/promises';
 import * as os from 'node:os';
 import { EnvironmentVariables } from '@shared/intefaces/env-config';
 import { LogLevel } from '@shared/enums/log-level.enum';
+import {
+  BYTES_IN_KB,
+  DEFAULT_LOGGER_LOG_LEVEL,
+  DEFAULT_LOGGER_MAX_FILE_SIZE,
+} from '@shared/constants/env';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
-  private combinedLogFilename = 'current-combined.log';
-  private errorLogFilename = 'current-error.log';
+  private currentLogPrefix = 'current';
+  private combinedLogFilename = `${this.currentLogPrefix}-combined.log`;
+  private errorLogFilename = `${this.currentLogPrefix}-error.log`;
   private logDirectory = path.join(process.cwd(), 'logs');
-  private logLevel = this.configService.get('LOGGER_LOG_LEVEL', {
-    infer: true,
-  });
-  private maxLogSize = this.configService.get('LOGGER_MAX_FILE_SIZE', {
-    infer: true,
-  });
+  private logLevel =
+    +this.configService.get('LOGGER_LOG_LEVEL', {
+      infer: true,
+    }) ?? DEFAULT_LOGGER_LOG_LEVEL;
+  private maxLogSize =
+    (+this.configService.get('LOGGER_MAX_FILE_SIZE', {
+      infer: true,
+    }) ?? DEFAULT_LOGGER_MAX_FILE_SIZE) * BYTES_IN_KB;
   constructor(private configService: ConfigService<EnvironmentVariables>) {
     super();
   }
@@ -37,7 +45,8 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
     if (this.logLevel > LogLevel.Error) {
       return;
     }
-    await this.outputMessage('error', message, optionalParams[0]);
+    console.error(`optional 0: ${optionalParams[0]}`);
+    await this.outputMessage('error', message, optionalParams[1]);
   }
 
   async warn(message: any, ...optionalParams: any[]) {
@@ -73,16 +82,33 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
     await this.writeToLog(output, levelName);
   }
 
+  private async rotateLogIfNeeded(logPath: string) {
+    try {
+      const fsStats = await fsPromises.stat(logPath);
+      if (fsStats.size > this.maxLogSize) {
+        const currentPrefixRegExp = new RegExp(`${this.currentLogPrefix}-`);
+        const newLogPath = logPath.replace(
+          currentPrefixRegExp,
+          `${Date.now()}-`,
+        );
+
+        await fsPromises.rename(logPath, newLogPath);
+      }
+    } catch {}
+  }
+
   private async writeToLog(output: string, levelName: LogLevelName) {
     const logFilePath = path.join(this.logDirectory, this.combinedLogFilename);
     const errorLogFilePath = path.join(
       this.logDirectory,
       this.errorLogFilename,
     );
-    const logOutput = output + os.EOL;
+    const logOutput = Buffer.from(output + os.EOL);
 
+    await this.rotateLogIfNeeded(logFilePath);
     const promises = [fsPromises.appendFile(logFilePath, logOutput)];
     if (levelName === 'error') {
+      await this.rotateLogIfNeeded(errorLogFilePath);
       promises.push(fsPromises.appendFile(errorLogFilePath, logOutput));
     }
 
