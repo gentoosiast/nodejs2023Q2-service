@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '@shared/services/prisma.service';
+import { PrismaService } from '@shared/services/prisma/prisma.service';
 import { FavsResponseDto } from './dtos/favs-response.dto';
 
 @Injectable()

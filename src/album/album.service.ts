@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '@shared/services/prisma.service';
+import { PrismaService } from '@shared/services/prisma/prisma.service';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumInfoDto } from './dtos/update-album-info.dto';
 import { AlbumEntity } from './entities/album.entity';

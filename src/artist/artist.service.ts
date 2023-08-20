@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '@shared/services/prisma.service';
+import { PrismaService } from '@shared/services/prisma/prisma.service';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistInfoDto } from './dtos/update-artist-info.dto';
 import { ArtistEntity } from './entities/artist.entity';

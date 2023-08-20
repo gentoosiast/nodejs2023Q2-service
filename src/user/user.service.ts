@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
 import * as bcrypt from 'bcrypt';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '@shared/services/prisma.service';
+import { PrismaService } from '@shared/services/prisma/prisma.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserEntity } from './entities/user.entity';

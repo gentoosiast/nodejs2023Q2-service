@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from '@shared/services/prisma.service';
+import { PrismaService } from '@shared/services/prisma/prisma.service';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackInfoDto } from './dtos/update-track-info.dto';
 import { TrackEntity } from './entities/track.entity';
