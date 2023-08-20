@@ -1,35 +1,25 @@
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { EnvironmentVariables } from '@shared/intefaces/env-config';
-import { IS_PUBLIC_KEY } from '@shared/decorators/public';
 
 @Injectable()
 export class AuthRefreshGuard implements CanActivate {
   constructor(
     private readonly configService: ConfigService<EnvironmentVariables>,
     private readonly jwtService: JwtService,
-    private reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (isPublic) {
-      return true;
-    }
-
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const token = this.extractTokenFromBody(request);
     if (!token) {
       throw new UnauthorizedException();
     }
@@ -41,13 +31,14 @@ export class AuthRefreshGuard implements CanActivate {
         secret: refreshSecret,
       });
     } catch {
-      throw new UnauthorizedException();
+      throw new ForbiddenException();
     }
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    return type === 'Bearer' ? token : undefined;
+  private extractTokenFromBody(request: Request): string | undefined {
+    const { refreshToken: token } = request.body;
+
+    return token;
   }
 }
