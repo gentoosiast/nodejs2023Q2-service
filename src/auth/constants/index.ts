@@ -1,2 +1,0 @@
-export const DEFAULT_TOKEN_EXPIRE_TIME = '1h';
-export const DEFAULT_TOKEN_REFRESH_EXPIRE_TIME = '24h';

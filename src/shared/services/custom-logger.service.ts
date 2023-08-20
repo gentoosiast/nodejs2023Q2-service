@@ -8,13 +8,9 @@ import { ConfigService } from '@nestjs/config';
 import * as path from 'node:path';
 import * as fsPromises from 'node:fs/promises';
 import * as os from 'node:os';
-import { EnvironmentVariables } from '@shared/intefaces/env-config';
+import { EnvironmentVariables } from '@config/interfaces/env-config';
 import { LogLevel } from '@shared/enums/log-level.enum';
-import {
-  BYTES_IN_KB,
-  DEFAULT_LOGGER_LOG_LEVEL,
-  DEFAULT_LOGGER_MAX_FILE_SIZE,
-} from '@shared/constants/env';
+import { BYTES_IN_KB } from '@shared/constants/env';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
@@ -22,14 +18,11 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
   private combinedLogFilename = `${this.currentLogPrefix}-combined.log`;
   private errorLogFilename = `${this.currentLogPrefix}-error.log`;
   private logDirectory = path.join(process.cwd(), 'logs');
-  private logLevel =
-    +this.configService.get('LOGGER_LOG_LEVEL', {
-      infer: true,
-    }) ?? DEFAULT_LOGGER_LOG_LEVEL;
+  private logLevel = this.configService.get('logger.logLevel', {
+    infer: true,
+  });
   private maxLogSize =
-    (+this.configService.get('LOGGER_MAX_FILE_SIZE', {
-      infer: true,
-    }) ?? DEFAULT_LOGGER_MAX_FILE_SIZE) * BYTES_IN_KB;
+    this.configService.get('logger.maxFileSize', { infer: true }) * BYTES_IN_KB;
   constructor(private configService: ConfigService<EnvironmentVariables>) {
     super();
   }

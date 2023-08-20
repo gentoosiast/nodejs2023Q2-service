@@ -8,7 +8,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { EnvironmentVariables } from '@shared/intefaces/env-config';
+import { EnvironmentVariables } from '@config/interfaces/env-config';
 
 @Injectable()
 export class AuthRefreshGuard implements CanActivate {
@@ -24,7 +24,7 @@ export class AuthRefreshGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      const refreshSecret = this.configService.get('JWT_SECRET_REFRESH_KEY', {
+      const refreshSecret = this.configService.get('jwt.refreshSecret', {
         infer: true,
       });
       await this.jwtService.verifyAsync(token, {

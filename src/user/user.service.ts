@@ -7,8 +7,7 @@ import { PrismaService } from '@shared/services/prisma.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserEntity } from './entities/user.entity';
-import { EnvironmentVariables } from '@shared/intefaces/env-config';
-import { DEFAULT_SALT_ROUNDS } from './constants';
+import { EnvironmentVariables } from '@config/interfaces/env-config';
 import { UniqueConstraintException } from '@shared/exceptions/unique-constraint.exception';
 
 export enum UpdateUserPasswordError {
@@ -25,11 +24,9 @@ export class UserService {
 
   async create({ login, password }: CreateUserDto): Promise<UserEntity> {
     try {
-      const saltRounds = +this.configService.get(
-        'CRYPT_SALT',
-        DEFAULT_SALT_ROUNDS,
-        { infer: true },
-      );
+      const saltRounds = this.configService.get('bcrypt.saltRounds', {
+        infer: true,
+      });
       const passwordHash = await bcrypt.hash(password, saltRounds);
 
       const user = await this.prismaService.user.create({
@@ -113,11 +110,9 @@ export class UserService {
       return UpdateUserPasswordError.WrongPassword;
     }
 
-    const saltRounds = +this.configService.get(
-      'CRYPT_SALT',
-      DEFAULT_SALT_ROUNDS,
-      { infer: true },
-    );
+    const saltRounds = this.configService.get('bcrypt.saltRounds', {
+      infer: true,
+    });
     const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
 
     try {

@@ -22,6 +22,7 @@
       "@album/*": ["src/album/*"],
       "@artist/*": ["src/artist/*"],
       "@auth/*": ["src/auth/*"],
+      "@config/*": ["src/config/*"],
       "@favs/*": ["src/favs/*"],
       "@shared/*": ["src/shared/*"],
       "@track/*": ["src/track/*"],
