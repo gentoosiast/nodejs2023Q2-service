@@ -4,26 +4,21 @@ import {
   Injectable,
   LoggerService,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import * as path from 'node:path';
-import * as fsPromises from 'node:fs/promises';
 import * as os from 'node:os';
+import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '@config/interfaces/env-config';
+import { LogWriterService } from '../log-writer/log-writer.service';
 import { LogLevel } from '@shared/enums/log-level.enum';
-import { BYTES_IN_KB } from '@shared/constants/logger';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
-  private currentLogPrefix = 'current';
-  private combinedLogFilename = `${this.currentLogPrefix}-combined.log`;
-  private errorLogFilename = `${this.currentLogPrefix}-error.log`;
-  private logDirectory = path.join(process.cwd(), 'logs');
   private logLevel = this.configService.get('logger.logLevel', {
     infer: true,
   });
-  private maxLogSize =
-    this.configService.get('logger.maxFileSize', { infer: true }) * BYTES_IN_KB;
-  constructor(private configService: ConfigService<EnvironmentVariables>) {
+  constructor(
+    private readonly configService: ConfigService<EnvironmentVariables>,
+    private readonly logWriterService: LogWriterService,
+  ) {
     super();
   }
 
@@ -72,39 +67,14 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
     const output = `${timeStamp}: ${levelName.toUpperCase()} [${context}]: ${message}`;
 
     console.log(this.colorize(output, levelName));
-    await this.writeToLog(output, levelName);
+    this.writeToLog(output, levelName);
   }
 
-  private async rotateLogIfNeeded(logPath: string) {
-    try {
-      const fsStats = await fsPromises.stat(logPath);
-      if (fsStats.size > this.maxLogSize) {
-        const currentPrefixRegExp = new RegExp(`${this.currentLogPrefix}-`);
-        const newLogPath = logPath.replace(
-          currentPrefixRegExp,
-          `${Date.now()}-`,
-        );
+  private writeToLog(output: string, levelName: LogLevelName) {
+    this.logWriterService.writeToCombinedLog(output + os.EOL);
 
-        await fsPromises.rename(logPath, newLogPath);
-      }
-    } catch {}
-  }
-
-  private async writeToLog(output: string, levelName: LogLevelName) {
-    const logFilePath = path.join(this.logDirectory, this.combinedLogFilename);
-    const errorLogFilePath = path.join(
-      this.logDirectory,
-      this.errorLogFilename,
-    );
-    const logOutput = Buffer.from(output + os.EOL);
-
-    await this.rotateLogIfNeeded(logFilePath);
-    const promises = [fsPromises.appendFile(logFilePath, logOutput)];
     if (levelName === 'error') {
-      await this.rotateLogIfNeeded(errorLogFilePath);
-      promises.push(fsPromises.appendFile(errorLogFilePath, logOutput));
+      this.logWriterService.writeToErrorLog(output + os.EOL);
     }
-
-    await Promise.all(promises);
   }
 }
