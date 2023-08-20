@@ -65,6 +65,7 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @HttpCode(HttpStatus.OK)
   @SkipAuth()
   @UseGuards(AuthRefreshGuard)
   @ApiResponse({
