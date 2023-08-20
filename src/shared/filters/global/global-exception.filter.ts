@@ -39,10 +39,11 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       status = statusCode;
     } else if (exception instanceof HttpException) {
       const statusCode = exception.getStatus();
-
       const exceptionResponse = exception.getResponse();
+
       if (typeof exceptionResponse !== 'string') {
         body = exceptionResponse as HttpExceptionBody;
+        body.error = exception.name;
       } else {
         body = {
           message: exceptionResponse,
