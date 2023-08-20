@@ -35,6 +35,8 @@ paths:
                 $ref: '#/components/schemas/UserResponseDto'
         '400':
           description: Request body does not contain required fields
+        '409':
+          description: User with provided login already exists
       tags: *ref_0
       security: *ref_1
   /user/{id}:
@@ -675,7 +677,7 @@ paths:
         - bearer: []
 info:
   title: Home Library Service
-  description: 'Home Library Service: RS School NodeJS 2023 Q2 - Week 6 Task'
+  description: 'Home Library Service: RS School NodeJS 2023 Q2 - Weeks 6-9 Task'
   version: 0.0.1
   contact: {}
 tags: []

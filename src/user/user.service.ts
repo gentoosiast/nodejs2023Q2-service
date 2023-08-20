@@ -9,6 +9,7 @@ import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserEntity } from './entities/user.entity';
 import { EnvironmentVariables } from '@shared/intefaces/env-config';
 import { DEFAULT_SALT_ROUNDS } from './constants';
+import { UniqueConstraintException } from '@shared/exceptions/unique-constraint.exception';
 
 export enum UpdateUserPasswordError {
   WrongPassword,
@@ -23,18 +24,31 @@ export class UserService {
   ) {}
 
   async create({ login, password }: CreateUserDto): Promise<UserEntity> {
-    const saltRounds = +this.configService.get(
-      'CRYPT_SALT',
-      DEFAULT_SALT_ROUNDS,
-      { infer: true },
-    );
-    const passwordHash = await bcrypt.hash(password, saltRounds);
+    try {
+      const saltRounds = +this.configService.get(
+        'CRYPT_SALT',
+        DEFAULT_SALT_ROUNDS,
+        { infer: true },
+      );
+      const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    const user = await this.prismaService.user.create({
-      data: { login, password: passwordHash },
-    });
+      const user = await this.prismaService.user.create({
+        data: { login, password: passwordHash },
+      });
 
-    return plainToClass(UserEntity, user);
+      return plainToClass(UserEntity, user);
+    } catch (err) {
+      console.log(JSON.stringify(err));
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2002'
+      ) {
+        throw new UniqueConstraintException(
+          `User with login ${login} already exists`,
+        );
+      }
+      throw err;
+    }
   }
 
   async findAll(): Promise<UserEntity[]> {

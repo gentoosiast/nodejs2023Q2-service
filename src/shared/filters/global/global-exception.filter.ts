@@ -10,6 +10,7 @@ import {
 import { Response } from 'express';
 import * as os from 'node:os';
 import { UnknownIdException } from '@shared/exceptions/unknown-id.exception';
+import { UniqueConstraintException } from '@shared/exceptions/unique-constraint.exception';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {
@@ -20,6 +21,15 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     let status: HttpStatus;
     if (exception instanceof UnknownIdException) {
       const statusCode = HttpStatus.BAD_REQUEST;
+
+      body = {
+        message: exception.message,
+        error: exception.name,
+        statusCode,
+      };
+      status = statusCode;
+    } else if (exception instanceof UniqueConstraintException) {
+      const statusCode = HttpStatus.CONFLICT;
 
       body = {
         message: exception.message,

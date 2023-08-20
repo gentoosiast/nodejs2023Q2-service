@@ -80,6 +80,10 @@ export class UserController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Request body does not contain required fields',
   })
+  @ApiResponse({
+    status: HttpStatus.CONFLICT,
+    description: 'User with provided login already exists',
+  })
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.userService.create(createUserDto);
   }
