@@ -10,7 +10,7 @@ import * as fsPromises from 'node:fs/promises';
 import * as os from 'node:os';
 import { EnvironmentVariables } from '@config/interfaces/env-config';
 import { LogLevel } from '@shared/enums/log-level.enum';
-import { BYTES_IN_KB } from '@shared/constants/env';
+import { BYTES_IN_KB } from '@shared/constants/logger';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
