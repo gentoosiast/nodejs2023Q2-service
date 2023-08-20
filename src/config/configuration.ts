@@ -5,7 +5,7 @@ import {
   DEFAULT_PORT,
   DEFAULT_TOKEN_EXPIRE_TIME,
   DEFAULT_TOKEN_REFRESH_EXPIRE_TIME,
-} from '@shared/constants/env';
+} from './constants';
 
 export default () => ({
   port: parseInt(process.env.PORT, 10) || DEFAULT_PORT,
