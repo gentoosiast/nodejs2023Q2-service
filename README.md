@@ -20,7 +20,7 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
 
 5. Start _Docker Desktop_ (only if you are MS Windows user, otherwise skip this step)
 
-6. Run `docker compose up -d` and wait until images are created & containers are started. You can check status of containers with `docker ps`
+6. Run `docker compose up -d --build` and wait until images are created & containers are started. You can check status of containers with `docker ps`
 
 7. Run Prisma ORM migrations: `npm run prisma:migrate:dev`
 
