@@ -30,9 +30,6 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
   }
 
   error(message: unknown, stack?: string, context?: string): void {
-    if (this.logLevel > LogLevel.Error) {
-      return;
-    }
     this.outputMessage('error', message, context, stack);
   }
 
