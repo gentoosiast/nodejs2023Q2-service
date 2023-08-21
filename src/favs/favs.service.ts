@@ -5,7 +5,7 @@ import { FavsResponseDto } from './dtos/favs-response.dto';
 
 @Injectable()
 export class FavsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
   async addAlbum(id: string): Promise<boolean> {
     try {

@@ -12,7 +12,7 @@ import { LogLevel } from '@shared/enums/log-level.enum';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
-  private logLevel = this.configService.get('logger.logLevel', {
+  private readonly logLevel = this.configService.get('logger.logLevel', {
     infer: true,
   });
   constructor(
