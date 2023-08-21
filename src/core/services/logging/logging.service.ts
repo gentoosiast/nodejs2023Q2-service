@@ -5,20 +5,16 @@ import {
   LoggerService,
 } from '@nestjs/common';
 import * as os from 'node:os';
-import { ConfigService } from '@nestjs/config';
-import { EnvironmentVariables } from '@config/interfaces/env-config';
 import { LogWriterService } from '../log-writer/log-writer.service';
 import { LogLevel } from '@core/enums/log-level.enum';
+import { DEFAULT_LOGGER_LOG_LEVEL } from '@config/constants';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
-  private readonly logLevel = this.configService.get('logger.logLevel', {
-    infer: true,
-  });
-  constructor(
-    private readonly configService: ConfigService<EnvironmentVariables>,
-    private readonly logWriterService: LogWriterService,
-  ) {
+  private readonly logLevel =
+    parseInt(process.env.LOGGER_LOG_LEVEL, 10) || DEFAULT_LOGGER_LOG_LEVEL;
+
+  constructor(private readonly logWriterService: LogWriterService) {
     super();
   }
 
