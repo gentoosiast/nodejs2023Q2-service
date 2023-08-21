@@ -11,7 +11,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { TrackResponseDto } from './dtos/track-response.dto';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackInfoDto } from './dtos/update-track-info.dto';
@@ -25,6 +31,10 @@ export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Get tracks list',
+    description: 'Gets all library tracks list',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Tracks have been successfully retrieved',
@@ -36,6 +46,10 @@ export class TrackController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get single track by id',
+    description: 'Get single track by id',
+  })
   @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
@@ -70,6 +84,10 @@ export class TrackController {
   }
 
   @Post()
+  @ApiOperation({
+    summary: 'Add new track',
+    description: 'Add new track information',
+  })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'The track has been successfully created',
@@ -85,6 +103,10 @@ export class TrackController {
   }
 
   @Put(':id')
+  @ApiOperation({
+    summary: 'Update track information',
+    description: 'Update library track information by UUID',
+  })
   @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
@@ -124,6 +146,10 @@ export class TrackController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete track',
+    description: 'Delete track from library',
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({
     name: 'id',

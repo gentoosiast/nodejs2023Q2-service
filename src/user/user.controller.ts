@@ -12,7 +12,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
@@ -26,6 +32,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get all users', description: 'Gets all users' })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Users have been successfully retrieved',
@@ -37,6 +44,10 @@ export class UserController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get single user by id',
+    description: 'Get single user by id',
+  })
   @ApiParam({
     name: 'id',
     description: 'user id (uuid v4)',
@@ -71,6 +82,7 @@ export class UserController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create user', description: 'Creates a new user' })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'The user has been successfully created',
@@ -89,6 +101,10 @@ export class UserController {
   }
 
   @Put(':id')
+  @ApiOperation({
+    summary: "Update user's password",
+    description: "Updates a user's password by ID",
+  })
   @ApiParam({
     name: 'id',
     description: 'user id (uuid v4)',
@@ -132,6 +148,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete user', description: 'Deletes user by ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({
     name: 'id',

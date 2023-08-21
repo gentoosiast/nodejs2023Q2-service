@@ -11,7 +11,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AlbumResponseDto } from './dtos/album-response.dto';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumInfoDto } from './dtos/update-album-info.dto';
@@ -25,6 +31,10 @@ export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Get albums list',
+    description: 'Gets all library albums list',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Albums have been successfully retrieved',
@@ -36,6 +46,10 @@ export class AlbumController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get single album by id',
+    description: 'Gets single album by id',
+  })
   @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
@@ -70,6 +84,10 @@ export class AlbumController {
   }
 
   @Post()
+  @ApiOperation({
+    summary: 'Add new album',
+    description: 'Add new album information',
+  })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'The album has been successfully created',
@@ -85,6 +103,10 @@ export class AlbumController {
   }
 
   @Put(':id')
+  @ApiOperation({
+    summary: 'Update album information',
+    description: 'Update library album information by UUID',
+  })
   @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
@@ -124,6 +146,10 @@ export class AlbumController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete album',
+    description: 'Delete album from library',
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({
     name: 'id',

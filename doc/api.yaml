@@ -3,6 +3,8 @@ paths:
   /user:
     get:
       operationId: UserController_findAll
+      summary: Get all users
+      description: Gets all users
       parameters: []
       responses:
         '200':
@@ -19,6 +21,8 @@ paths:
         - bearer: []
     post:
       operationId: UserController_create
+      summary: Create user
+      description: Creates a new user
       parameters: []
       requestBody:
         required: true
@@ -42,6 +46,8 @@ paths:
   /user/{id}:
     get:
       operationId: UserController_findOne
+      summary: Get single user by id
+      description: Get single user by id
       parameters:
         - name: id
           required: true
@@ -66,6 +72,8 @@ paths:
       security: *ref_1
     put:
       operationId: UserController_updatePassword
+      summary: Update user's password
+      description: Updates a user's password by ID
       parameters:
         - name: id
           required: true
@@ -98,6 +106,8 @@ paths:
       security: *ref_1
     delete:
       operationId: UserController_remove
+      summary: Delete user
+      description: Deletes user by ID
       parameters:
         - name: id
           required: true
@@ -119,6 +129,8 @@ paths:
   /artist:
     get:
       operationId: ArtistController_findAll
+      summary: Get all artists
+      description: Gets all artists
       parameters: []
       responses:
         '200':
@@ -135,6 +147,8 @@ paths:
         - bearer: []
     post:
       operationId: ArtistController_create
+      summary: Add new artist
+      description: Add new artist
       parameters: []
       requestBody:
         required: true
@@ -156,6 +170,8 @@ paths:
   /artist/{id}:
     get:
       operationId: ArtistController_findOne
+      summary: Get single artist by id
+      description: Get single artist by id
       parameters:
         - name: id
           required: true
@@ -180,6 +196,8 @@ paths:
       security: *ref_3
     put:
       operationId: ArtistController_updateInfo
+      summary: Update artist information
+      description: Update artist information by UUID
       parameters:
         - name: id
           required: true
@@ -210,6 +228,8 @@ paths:
       security: *ref_3
     delete:
       operationId: ArtistController_remove
+      summary: Delete artist
+      description: Delete artist from library
       parameters:
         - name: id
           required: true
@@ -231,6 +251,8 @@ paths:
   /album:
     get:
       operationId: AlbumController_findAll
+      summary: Get albums list
+      description: Gets all library albums list
       parameters: []
       responses:
         '200':
@@ -247,6 +269,8 @@ paths:
         - bearer: []
     post:
       operationId: AlbumController_create
+      summary: Add new album
+      description: Add new album information
       parameters: []
       requestBody:
         required: true
@@ -270,6 +294,8 @@ paths:
   /album/{id}:
     get:
       operationId: AlbumController_findOne
+      summary: Get single album by id
+      description: Gets single album by id
       parameters:
         - name: id
           required: true
@@ -294,6 +320,8 @@ paths:
       security: *ref_5
     put:
       operationId: AlbumController_updateInfo
+      summary: Update album information
+      description: Update library album information by UUID
       parameters:
         - name: id
           required: true
@@ -326,6 +354,8 @@ paths:
       security: *ref_5
     delete:
       operationId: AlbumController_remove
+      summary: Delete album
+      description: Delete album from library
       parameters:
         - name: id
           required: true
@@ -347,6 +377,8 @@ paths:
   /track:
     get:
       operationId: TrackController_findAll
+      summary: Get tracks list
+      description: Gets all library tracks list
       parameters: []
       responses:
         '200':
@@ -363,6 +395,8 @@ paths:
         - bearer: []
     post:
       operationId: TrackController_create
+      summary: Add new track
+      description: Add new track information
       parameters: []
       requestBody:
         required: true
@@ -386,6 +420,8 @@ paths:
   /track/{id}:
     get:
       operationId: TrackController_findOne
+      summary: Get single track by id
+      description: Get single track by id
       parameters:
         - name: id
           required: true
@@ -410,6 +446,8 @@ paths:
       security: *ref_7
     put:
       operationId: TrackController_updateInfo
+      summary: Update track information
+      description: Update library track information by UUID
       parameters:
         - name: id
           required: true
@@ -442,6 +480,8 @@ paths:
       security: *ref_7
     delete:
       operationId: TrackController_remove
+      summary: Delete track
+      description: Delete track from library
       parameters:
         - name: id
           required: true
@@ -463,6 +503,8 @@ paths:
   /favs:
     get:
       operationId: FavsController_findAll
+      summary: Get all favorites
+      description: Gets all favorites movies, tracks and books
       parameters: []
       responses:
         '200':
@@ -478,6 +520,8 @@ paths:
   /favs/album/{id}:
     post:
       operationId: FavsController_addAlbum
+      summary: Add album to the favorites
+      description: Add album to the favorites
       parameters:
         - name: id
           required: true
@@ -498,6 +542,8 @@ paths:
       security: *ref_9
     delete:
       operationId: FavsController_removeAlbum
+      summary: Delete album from favorites
+      description: Delete album from favorites
       parameters:
         - name: id
           required: true
@@ -519,6 +565,8 @@ paths:
   /favs/artist/{id}:
     post:
       operationId: FavsController_addArtist
+      summary: Add artist to the favorites
+      description: Add artist to the favorites
       parameters:
         - name: id
           required: true
@@ -539,6 +587,8 @@ paths:
       security: *ref_9
     delete:
       operationId: FavsController_removeArtist
+      summary: Delete artist from favorites
+      description: Delete artist from favorites
       parameters:
         - name: id
           required: true
@@ -560,6 +610,8 @@ paths:
   /favs/track/{id}:
     post:
       operationId: FavsController_addTrack
+      summary: Add track to the favorites
+      description: Add track to the favorites
       parameters:
         - name: id
           required: true
@@ -580,6 +632,8 @@ paths:
       security: *ref_9
     delete:
       operationId: FavsController_removeTrack
+      summary: Delete track from favorites
+      description: Delete track from favorites
       parameters:
         - name: id
           required: true
@@ -601,6 +655,8 @@ paths:
   /auth/signup:
     post:
       operationId: AuthController_signup
+      summary: Signup
+      description: Signup a user
       parameters: []
       requestBody:
         required: true
@@ -622,6 +678,8 @@ paths:
   /auth/login:
     post:
       operationId: AuthController_login
+      summary: Login
+      description: Logins a user and returns access & refresh JWT tokens
       parameters: []
       requestBody:
         required: true
@@ -644,6 +702,8 @@ paths:
   /auth/refresh:
     post:
       operationId: AuthController_refresh
+      summary: Refresh
+      description: Refreshes user's JWT tokens
       parameters: []
       requestBody:
         required: true

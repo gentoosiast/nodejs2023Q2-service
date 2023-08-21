@@ -10,7 +10,13 @@ import {
   Post,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FavsService } from './favs.service';
 import { FavsResponseDto } from './dtos/favs-response.dto';
 import { UUID_VERSION } from '@shared/constants/uuid';
@@ -22,6 +28,10 @@ export class FavsController {
   constructor(private readonly favsService: FavsService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Get all favorites',
+    description: 'Gets all favorites movies, tracks and books',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Favorites have been successfully retrieved',
@@ -32,6 +42,10 @@ export class FavsController {
   }
 
   @Post('album/:id')
+  @ApiOperation({
+    summary: 'Add album to the favorites',
+    description: 'Add album to the favorites',
+  })
   @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
@@ -68,6 +82,10 @@ export class FavsController {
 
   @Delete('album/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Delete album from favorites',
+    description: 'Delete album from favorites',
+  })
   @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
@@ -99,6 +117,10 @@ export class FavsController {
   }
 
   @Post('artist/:id')
+  @ApiOperation({
+    summary: 'Add artist to the favorites',
+    description: 'Add artist to the favorites',
+  })
   @ApiParam({
     name: 'id',
     description: 'artist id (uuid v4)',
@@ -135,6 +157,10 @@ export class FavsController {
 
   @Delete('artist/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({
+    summary: 'Delete artist from favorites',
+    description: 'Delete artist from favorites',
+  })
   @ApiParam({
     name: 'id',
     description: 'artist id (uuid v4)',
@@ -166,6 +192,10 @@ export class FavsController {
   }
 
   @Post('track/:id')
+  @ApiOperation({
+    summary: 'Add track to the favorites',
+    description: 'Add track to the favorites',
+  })
   @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
@@ -201,6 +231,10 @@ export class FavsController {
   }
 
   @Delete('track/:id')
+  @ApiOperation({
+    summary: 'Delete track from favorites',
+    description: 'Delete track from favorites',
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({
     name: 'id',

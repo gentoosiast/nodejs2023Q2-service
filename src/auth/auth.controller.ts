@@ -7,7 +7,7 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from '@user/dtos/create-user.dto';
 import { TokenResponseDto } from './dtos/token-response.dto';
@@ -24,6 +24,7 @@ export class AuthController {
 
   @Post('signup')
   @SkipAuth()
+  @ApiOperation({ summary: 'Signup', description: 'Signup a user' })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'The user has been successfully created',
@@ -40,6 +41,10 @@ export class AuthController {
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @SkipAuth()
+  @ApiOperation({
+    summary: 'Login',
+    description: 'Logins a user and returns access & refresh JWT tokens',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successful login with provided login and password',
@@ -68,6 +73,10 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @SkipAuth()
   @UseGuards(AuthRefreshGuard)
+  @ApiOperation({
+    summary: 'Refresh',
+    description: "Refreshes user's JWT tokens",
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Successful refresh, new tokens issued',

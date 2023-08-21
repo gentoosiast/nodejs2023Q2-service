@@ -11,7 +11,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ArtistService } from './artist.service';
 import { ArtistResponseDto } from './dtos/artist-response.dto';
 import { CreateArtistDto } from './dtos/create-artist.dto';
@@ -25,6 +31,7 @@ export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get all artists', description: 'Gets all artists' })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Artists have been successfully retrieved',
@@ -36,6 +43,10 @@ export class ArtistController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get single artist by id',
+    description: 'Get single artist by id',
+  })
   @ApiParam({
     name: 'id',
     description: 'artist id (uuid v4)',
@@ -70,6 +81,7 @@ export class ArtistController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Add new artist', description: 'Add new artist' })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'The artist has been successfully created',
@@ -84,6 +96,10 @@ export class ArtistController {
   }
 
   @Put(':id')
+  @ApiOperation({
+    summary: 'Update artist information',
+    description: 'Update artist information by UUID',
+  })
   @ApiParam({
     name: 'id',
     description: 'artist id (uuid v4)',
@@ -122,6 +138,10 @@ export class ArtistController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete artist',
+    description: 'Delete artist from library',
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({
     name: 'id',
