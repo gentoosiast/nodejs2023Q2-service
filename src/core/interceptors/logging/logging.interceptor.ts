@@ -16,7 +16,7 @@ export class LoggingInterceptor implements NestInterceptor {
       tap((data) => {
         const responseBody = JSON.stringify(data);
 
-        this.logger.debug(`response body: ${responseBody}`);
+        this.logger.debug(`RESPONSE: body: ${responseBody}`);
       }),
     );
   }
