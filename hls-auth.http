@@ -1,0 +1,29 @@
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+@baseUrl = http://localhost:4000
+
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "login": "gentoosiast",
+  "password": "abracadabra"
+}
+
+###
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "login": "gentoosiast",
+  "password": "abracadabra"
+}
+
+###
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "<your-refresh-token-here>"
+}

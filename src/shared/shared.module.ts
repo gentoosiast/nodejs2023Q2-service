@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { InMemoryDbService } from './services/in-memory-db.service';
-import { UUIDService } from './services/uuid.service';
+import { ConfigModule } from '@nestjs/config';
+import { PrismaService } from './services/prisma/prisma.service';
 
 @Module({
-  providers: [InMemoryDbService, UUIDService],
-  exports: [InMemoryDbService, UUIDService],
+  providers: [PrismaService],
+  imports: [ConfigModule],
+  exports: [PrismaService],
 })
 export class SharedModule {}

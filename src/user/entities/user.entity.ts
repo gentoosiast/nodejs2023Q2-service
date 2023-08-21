@@ -1,4 +1,4 @@
-import { Exclude } from 'class-transformer';
+import { Exclude, Transform } from 'class-transformer';
 import { User } from '../interfaces/user.interface';
 
 export class UserEntity implements User {
@@ -11,7 +11,9 @@ export class UserEntity implements User {
 
   version: number;
 
+  @Transform(({ value }) => new Date(value).getTime())
   createdAt: number;
 
+  @Transform(({ value }) => new Date(value).getTime())
   updatedAt: number;
 }

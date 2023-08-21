@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { plainToClass } from 'class-transformer';
-import { InMemoryDbService } from '@shared/services/in-memory-db.service';
-import { UUIDService } from '@shared/services/uuid.service';
-import { User } from './interfaces/user.interface';
+import * as bcrypt from 'bcrypt';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from '@shared/services/prisma/prisma.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdatePasswordDto } from './dtos/update-password.dto';
 import { UserEntity } from './entities/user.entity';
+import { EnvironmentVariables } from '@config/interfaces/env-config';
+import { UniqueConstraintException } from '@shared/exceptions/unique-constraint.exception';
 
 export enum UpdateUserPasswordError {
   WrongPassword,
@@ -15,32 +18,46 @@ export enum UpdateUserPasswordError {
 @Injectable()
 export class UserService {
   constructor(
-    private readonly inMemoryDbService: InMemoryDbService,
-    private readonly uuidService: UUIDService,
+    private readonly configService: ConfigService<EnvironmentVariables>,
+    private readonly prismaService: PrismaService,
   ) {}
 
-  create(userDto: CreateUserDto): UserEntity {
-    const date = new Date().getTime();
-    const user: User = {
-      id: this.uuidService.generate(),
-      ...userDto,
-      version: 1,
-      createdAt: date,
-      updatedAt: date,
-    };
-    this.inMemoryDbService.users.add(user.id, user);
+  async create({ login, password }: CreateUserDto): Promise<UserEntity> {
+    try {
+      const saltRounds = this.configService.get('bcrypt.saltRounds', {
+        infer: true,
+      });
+      const passwordHash = await bcrypt.hash(password, saltRounds);
 
-    return plainToClass(UserEntity, user);
+      const user = await this.prismaService.user.create({
+        data: { login, password: passwordHash },
+      });
+
+      return plainToClass(UserEntity, user);
+    } catch (err) {
+      console.log(JSON.stringify(err));
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2002'
+      ) {
+        throw new UniqueConstraintException(
+          `User with login ${login} already exists`,
+        );
+      }
+      throw err;
+    }
   }
 
-  findAll(): UserEntity[] {
-    const users = this.inMemoryDbService.users.findAll();
+  async findAll(): Promise<UserEntity[]> {
+    const users = await this.prismaService.user.findMany();
 
     return users.map((user) => plainToClass(UserEntity, user));
   }
 
-  findOne(id: string): UserEntity | null {
-    const user = this.inMemoryDbService.users.findOne(id);
+  async findOne(id: string): Promise<UserEntity | null> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id },
+    });
 
     if (!user) {
       return null;
@@ -49,33 +66,83 @@ export class UserService {
     return plainToClass(UserEntity, user);
   }
 
-  remove(id: string): boolean {
-    return this.inMemoryDbService.users.delete(id);
+  async findOneByLogin(login: string): Promise<UserEntity | null> {
+    const user = await this.prismaService.user.findUnique({
+      where: { login },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return plainToClass(UserEntity, user);
   }
 
-  updatePassword(
+  async remove(id: string): Promise<boolean> {
+    try {
+      await this.prismaService.user.delete({ where: { id } });
+
+      return true;
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2025' // record not found
+      ) {
+        return false;
+      }
+
+      throw err;
+    }
+  }
+
+  async updatePassword(
     id: string,
     { oldPassword, newPassword }: UpdatePasswordDto,
-  ): UserEntity | UpdateUserPasswordError {
-    const user = this.inMemoryDbService.users.findOne(id);
+  ): Promise<UserEntity | UpdateUserPasswordError> {
+    const user = await this.prismaService.user.findUnique({ where: { id } });
 
     if (!user) {
       return UpdateUserPasswordError.UserNotFound;
     }
 
-    if (user.password !== oldPassword) {
+    const isPasswordCorrect = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordCorrect) {
       return UpdateUserPasswordError.WrongPassword;
     }
 
-    const updatedUser: User = {
-      ...user,
-      password: newPassword,
-      updatedAt: new Date().getTime(),
-      version: user.version + 1,
-    };
+    const saltRounds = this.configService.get('bcrypt.saltRounds', {
+      infer: true,
+    });
+    const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
 
-    this.inMemoryDbService.users.add(id, updatedUser);
+    try {
+      const updatedUser = await this.prismaService.user.update({
+        where: { id },
+        data: { version: user.version + 1, password: newPasswordHash },
+      });
 
-    return plainToClass(UserEntity, updatedUser);
+      return plainToClass(UserEntity, updatedUser);
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2025' // record not found
+      ) {
+        return UpdateUserPasswordError.UserNotFound;
+      }
+
+      throw err;
+    }
+  }
+
+  async verifyPassword(id: string, password: string): Promise<boolean> {
+    const user = await this.prismaService.user.findUnique({ where: { id } });
+
+    if (!user) {
+      return false;
+    }
+
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+    return isPasswordCorrect;
   }
 }

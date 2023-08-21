@@ -11,7 +11,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { AlbumResponseDto } from './dtos/album-response.dto';
 import { CreateAlbumDto } from './dtos/create-album.dto';
 import { UpdateAlbumInfoDto } from './dtos/update-album-info.dto';
@@ -19,22 +25,35 @@ import { AlbumService } from './album.service';
 import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('album')
+@ApiBearerAuth()
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  description: 'Access token is missing or invalid',
+})
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Get albums list',
+    description: 'Gets all library albums list',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Albums have been successfully retrieved',
     type: AlbumResponseDto,
     isArray: true,
   })
-  findAll() {
-    return this.albumService.findAll();
+  async findAll() {
+    return await this.albumService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get single album by id',
+    description: 'Gets single album by id',
+  })
   @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
@@ -56,10 +75,10 @@ export class AlbumController {
     status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found',
   })
-  findOne(
+  async findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const album = this.albumService.findOne(id);
+    const album = await this.albumService.findOne(id);
 
     if (!album) {
       throw new NotFoundException('Album not found');
@@ -69,6 +88,10 @@ export class AlbumController {
   }
 
   @Post()
+  @ApiOperation({
+    summary: 'Add new album',
+    description: 'Add new album information',
+  })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'The album has been successfully created',
@@ -79,11 +102,15 @@ export class AlbumController {
     description:
       'Request body does not contain required fields or artistId in DTO is invalid or points to non-existing entity',
   })
-  create(@Body() createAlbumDto: CreateAlbumDto) {
-    return this.albumService.create(createAlbumDto);
+  async create(@Body() createAlbumDto: CreateAlbumDto) {
+    return await this.albumService.create(createAlbumDto);
   }
 
   @Put(':id')
+  @ApiOperation({
+    summary: 'Update album information',
+    description: 'Update library album information by UUID',
+  })
   @ApiParam({
     name: 'id',
     description: 'album id (uuid v4)',
@@ -106,11 +133,14 @@ export class AlbumController {
     status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found',
   })
-  updateInfo(
+  async updateInfo(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
     @Body() updateAlbumInfoDto: UpdateAlbumInfoDto,
   ) {
-    const updatedAlbum = this.albumService.updateInfo(id, updateAlbumInfoDto);
+    const updatedAlbum = await this.albumService.updateInfo(
+      id,
+      updateAlbumInfoDto,
+    );
 
     if (!updatedAlbum) {
       throw new NotFoundException('Album not found');
@@ -120,6 +150,10 @@ export class AlbumController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete album',
+    description: 'Delete album from library',
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({
     name: 'id',
@@ -141,10 +175,10 @@ export class AlbumController {
     status: HttpStatus.NOT_FOUND,
     description: 'Album with provided id was not found',
   })
-  remove(
+  async remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const result = this.albumService.remove(id);
+    const result = await this.albumService.remove(id);
 
     if (!result) {
       throw new NotFoundException('Album not found');

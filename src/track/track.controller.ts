@@ -11,7 +11,13 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { TrackResponseDto } from './dtos/track-response.dto';
 import { CreateTrackDto } from './dtos/create-track.dto';
 import { UpdateTrackInfoDto } from './dtos/update-track-info.dto';
@@ -19,22 +25,35 @@ import { TrackService } from './track.service';
 import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('track')
+@ApiBearerAuth()
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  description: 'Access token is missing or invalid',
+})
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}
 
   @Get()
+  @ApiOperation({
+    summary: 'Get tracks list',
+    description: 'Gets all library tracks list',
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Tracks have been successfully retrieved',
     type: TrackResponseDto,
     isArray: true,
   })
-  findAll() {
-    return this.trackService.findAll();
+  async findAll() {
+    return await this.trackService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get single track by id',
+    description: 'Get single track by id',
+  })
   @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
@@ -56,10 +75,10 @@ export class TrackController {
     status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
-  findOne(
+  async findOne(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const track = this.trackService.findOne(id);
+    const track = await this.trackService.findOne(id);
 
     if (!track) {
       throw new NotFoundException('Track not found');
@@ -69,6 +88,10 @@ export class TrackController {
   }
 
   @Post()
+  @ApiOperation({
+    summary: 'Add new track',
+    description: 'Add new track information',
+  })
   @ApiResponse({
     status: HttpStatus.CREATED,
     description: 'The track has been successfully created',
@@ -79,11 +102,15 @@ export class TrackController {
     description:
       'Request body does not contain required fields or one of ids in DTO is invalid or points to non-existing entity',
   })
-  create(@Body() createTrackDto: CreateTrackDto) {
-    return this.trackService.create(createTrackDto);
+  async create(@Body() createTrackDto: CreateTrackDto) {
+    return await this.trackService.create(createTrackDto);
   }
 
   @Put(':id')
+  @ApiOperation({
+    summary: 'Update track information',
+    description: 'Update library track information by UUID',
+  })
   @ApiParam({
     name: 'id',
     description: 'track id (uuid v4)',
@@ -106,11 +133,14 @@ export class TrackController {
     status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
-  updateInfo(
+  async updateInfo(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
     @Body() updateTrackInfoDto: UpdateTrackInfoDto,
   ) {
-    const updatedTrack = this.trackService.updateInfo(id, updateTrackInfoDto);
+    const updatedTrack = await this.trackService.updateInfo(
+      id,
+      updateTrackInfoDto,
+    );
 
     if (!updatedTrack) {
       throw new NotFoundException('Track not found');
@@ -120,6 +150,10 @@ export class TrackController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete track',
+    description: 'Delete track from library',
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiParam({
     name: 'id',
@@ -141,10 +175,10 @@ export class TrackController {
     status: HttpStatus.NOT_FOUND,
     description: 'Track with provided id was not found',
   })
-  remove(
+  async remove(
     @Param('id', new ParseUUIDPipe({ version: UUID_VERSION })) id: string,
   ) {
-    const result = this.trackService.remove(id);
+    const result = await this.trackService.remove(id);
 
     if (!result) {
       throw new NotFoundException('Track not found');

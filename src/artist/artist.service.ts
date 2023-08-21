@@ -1,40 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { plainToClass } from 'class-transformer';
-import { AlbumService } from '@album/album.service';
-import { FavsService } from '@favs/favs.service';
-import { InMemoryDbService } from '@shared/services/in-memory-db.service';
-import { TrackService } from '@track/track.service';
-import { UUIDService } from '@shared/services/uuid.service';
+import { Prisma } from '@prisma/client';
+import { PrismaService } from '@shared/services/prisma/prisma.service';
 import { CreateArtistDto } from './dtos/create-artist.dto';
 import { UpdateArtistInfoDto } from './dtos/update-artist-info.dto';
 import { ArtistEntity } from './entities/artist.entity';
-import { Artist } from './interfaces/artist.interface';
 
 @Injectable()
 export class ArtistService {
-  constructor(
-    private readonly albumService: AlbumService,
-    private readonly favsService: FavsService,
-    private readonly inMemoryDbService: InMemoryDbService,
-    private readonly trackService: TrackService,
-    private readonly uuidService: UUIDService,
-  ) {}
+  constructor(private readonly prismaService: PrismaService) {}
 
-  create(artistDto: CreateArtistDto): ArtistEntity {
-    const artist: Artist = { ...artistDto, id: this.uuidService.generate() };
-    this.inMemoryDbService.artists.add(artist.id, artist);
+  async create(artistDto: CreateArtistDto): Promise<ArtistEntity> {
+    const artist = await this.prismaService.artist.create({ data: artistDto });
 
     return plainToClass(ArtistEntity, artist);
   }
 
-  findAll(): ArtistEntity[] {
-    const artists = this.inMemoryDbService.artists.findAll();
+  async findAll(): Promise<ArtistEntity[]> {
+    const artists = await this.prismaService.artist.findMany();
 
     return artists.map((artist) => plainToClass(ArtistEntity, artist));
   }
 
-  findOne(id: string): ArtistEntity | null {
-    const artist = this.inMemoryDbService.artists.findOne(id);
+  async findOne(id: string): Promise<ArtistEntity | null> {
+    const artist = await this.prismaService.artist.findUnique({
+      where: { id },
+    });
 
     if (!artist) {
       return null;
@@ -43,42 +34,45 @@ export class ArtistService {
     return plainToClass(ArtistEntity, artist);
   }
 
-  findMany(ids: string[]): ArtistEntity[] {
-    const artists = this.inMemoryDbService.artists.findMany(ids);
+  async remove(id: string): Promise<boolean> {
+    try {
+      await this.prismaService.artist.delete({
+        where: { id },
+      });
 
-    return artists.map((artist) => plainToClass(ArtistEntity, artist));
-  }
+      return true;
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2025' // record not found
+      ) {
+        return false;
+      }
 
-  isExists(id: string): boolean {
-    return this.inMemoryDbService.artists.has(id);
-  }
-
-  remove(id: string): boolean {
-    if (this.inMemoryDbService.artists.has(id)) {
-      this.favsService.removeArtist(id);
-      this.albumService.handleArtistRemoval(id);
-      this.trackService.handleArtistRemoval(id);
-
-      return this.inMemoryDbService.artists.delete(id);
+      throw err;
     }
-
-    return false;
   }
 
-  updateInfo(id: string, artistDto: UpdateArtistInfoDto): ArtistEntity | null {
-    const artist = this.inMemoryDbService.artists.findOne(id);
+  async updateInfo(
+    id: string,
+    artistDto: UpdateArtistInfoDto,
+  ): Promise<ArtistEntity | null> {
+    try {
+      const updatedArtist = await this.prismaService.artist.update({
+        where: { id },
+        data: artistDto,
+      });
 
-    if (!artist) {
-      return null;
+      return plainToClass(ArtistEntity, updatedArtist);
+    } catch (err) {
+      if (
+        err instanceof Prisma.PrismaClientKnownRequestError &&
+        err.code === 'P2025' // record not found
+      ) {
+        return null;
+      }
+
+      throw err;
     }
-
-    const updatedArtist: Artist = {
-      ...artist,
-      ...artistDto,
-    };
-
-    this.inMemoryDbService.artists.add(artist.id, updatedArtist);
-
-    return plainToClass(ArtistEntity, updatedArtist);
   }
 }
