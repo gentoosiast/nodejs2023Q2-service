@@ -23,6 +23,10 @@ import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('favs')
 @ApiBearerAuth()
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  description: 'Access token is missing or invalid',
+})
 @Controller('favs')
 export class FavsController {
   constructor(private readonly favsService: FavsService) {}

@@ -26,6 +26,10 @@ import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('track')
 @ApiBearerAuth()
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  description: 'Access token is missing or invalid',
+})
 @Controller('track')
 export class TrackController {
   constructor(private readonly trackService: TrackService) {}

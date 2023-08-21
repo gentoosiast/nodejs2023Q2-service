@@ -26,6 +26,10 @@ import { UUID_VERSION } from '@shared/constants/uuid';
 
 @ApiTags('album')
 @ApiBearerAuth()
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  description: 'Access token is missing or invalid',
+})
 @Controller('album')
 export class AlbumController {
   constructor(private readonly albumService: AlbumService) {}

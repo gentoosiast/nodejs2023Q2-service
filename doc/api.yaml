@@ -15,9 +15,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserResponseDto'
-      tags: &ref_0
+        '401': &ref_0
+          description: Access token is missing or invalid
+      tags: &ref_1
         - user
-      security: &ref_1
+      security: &ref_2
         - bearer: []
     post:
       operationId: UserController_create
@@ -39,10 +41,11 @@ paths:
                 $ref: '#/components/schemas/UserResponseDto'
         '400':
           description: Request body does not contain required fields
+        '401': *ref_0
         '409':
           description: User with provided login already exists
-      tags: *ref_0
-      security: *ref_1
+      tags: *ref_1
+      security: *ref_2
   /user/{id}:
     get:
       operationId: UserController_findOne
@@ -66,10 +69,11 @@ paths:
                 $ref: '#/components/schemas/UserResponseDto'
         '400':
           description: Provided user id is invalid (not uuid)
+        '401': *ref_0
         '404':
           description: User with provided id was not found
-      tags: *ref_0
-      security: *ref_1
+      tags: *ref_1
+      security: *ref_2
     put:
       operationId: UserController_updatePassword
       summary: Update user's password
@@ -98,12 +102,13 @@ paths:
                 $ref: '#/components/schemas/UserResponseDto'
         '400':
           description: Provided user id is invalid (not uuid)
+        '401': *ref_0
         '403':
           description: Provided user's password is wrong
         '404':
           description: User with provided id was not found
-      tags: *ref_0
-      security: *ref_1
+      tags: *ref_1
+      security: *ref_2
     delete:
       operationId: UserController_remove
       summary: Delete user
@@ -122,10 +127,11 @@ paths:
           description: User has been successfully deleted
         '400':
           description: Provided user id is invalid (not uuid)
+        '401': *ref_0
         '404':
           description: User with provided id was not found
-      tags: *ref_0
-      security: *ref_1
+      tags: *ref_1
+      security: *ref_2
   /artist:
     get:
       operationId: ArtistController_findAll
@@ -141,9 +147,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ArtistResponseDto'
-      tags: &ref_2
+        '401': &ref_3
+          description: Access token is missing or invalid
+      tags: &ref_4
         - artist
-      security: &ref_3
+      security: &ref_5
         - bearer: []
     post:
       operationId: ArtistController_create
@@ -165,8 +173,9 @@ paths:
                 $ref: '#/components/schemas/ArtistResponseDto'
         '400':
           description: Request body does not contain required fields
-      tags: *ref_2
-      security: *ref_3
+        '401': *ref_3
+      tags: *ref_4
+      security: *ref_5
   /artist/{id}:
     get:
       operationId: ArtistController_findOne
@@ -190,10 +199,11 @@ paths:
                 $ref: '#/components/schemas/ArtistResponseDto'
         '400':
           description: Provided id of artist is invalid (not uuid)
+        '401': *ref_3
         '404':
           description: Artist with provided id was not found
-      tags: *ref_2
-      security: *ref_3
+      tags: *ref_4
+      security: *ref_5
     put:
       operationId: ArtistController_updateInfo
       summary: Update artist information
@@ -222,10 +232,11 @@ paths:
                 $ref: '#/components/schemas/ArtistResponseDto'
         '400':
           description: Provided id of artist is invalid (not uuid)
+        '401': *ref_3
         '404':
           description: Artist with provided id was not found
-      tags: *ref_2
-      security: *ref_3
+      tags: *ref_4
+      security: *ref_5
     delete:
       operationId: ArtistController_remove
       summary: Delete artist
@@ -244,10 +255,11 @@ paths:
           description: Artist has been successfully deleted
         '400':
           description: Provided id of artist is invalid (not uuid)
+        '401': *ref_3
         '404':
           description: Artist with provided id was not found
-      tags: *ref_2
-      security: *ref_3
+      tags: *ref_4
+      security: *ref_5
   /album:
     get:
       operationId: AlbumController_findAll
@@ -263,9 +275,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/AlbumResponseDto'
-      tags: &ref_4
+        '401': &ref_6
+          description: Access token is missing or invalid
+      tags: &ref_7
         - album
-      security: &ref_5
+      security: &ref_8
         - bearer: []
     post:
       operationId: AlbumController_create
@@ -289,8 +303,9 @@ paths:
           description: >-
             Request body does not contain required fields or artistId in DTO is
             invalid or points to non-existing entity
-      tags: *ref_4
-      security: *ref_5
+        '401': *ref_6
+      tags: *ref_7
+      security: *ref_8
   /album/{id}:
     get:
       operationId: AlbumController_findOne
@@ -314,10 +329,11 @@ paths:
                 $ref: '#/components/schemas/AlbumResponseDto'
         '400':
           description: Provided id of album is invalid (not uuid)
+        '401': *ref_6
         '404':
           description: Album with provided id was not found
-      tags: *ref_4
-      security: *ref_5
+      tags: *ref_7
+      security: *ref_8
     put:
       operationId: AlbumController_updateInfo
       summary: Update album information
@@ -348,10 +364,11 @@ paths:
           description: >-
             Provided id of album is invalid (not uuid) or artistId in DTO is
             invalid or points to non-existing entity
+        '401': *ref_6
         '404':
           description: Album with provided id was not found
-      tags: *ref_4
-      security: *ref_5
+      tags: *ref_7
+      security: *ref_8
     delete:
       operationId: AlbumController_remove
       summary: Delete album
@@ -370,10 +387,11 @@ paths:
           description: Album has been successfully deleted
         '400':
           description: Provided id of album is invalid (not uuid)
+        '401': *ref_6
         '404':
           description: Album with provided id was not found
-      tags: *ref_4
-      security: *ref_5
+      tags: *ref_7
+      security: *ref_8
   /track:
     get:
       operationId: TrackController_findAll
@@ -389,9 +407,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TrackResponseDto'
-      tags: &ref_6
+        '401': &ref_9
+          description: Access token is missing or invalid
+      tags: &ref_10
         - track
-      security: &ref_7
+      security: &ref_11
         - bearer: []
     post:
       operationId: TrackController_create
@@ -415,8 +435,9 @@ paths:
           description: >-
             Request body does not contain required fields or one of ids in DTO
             is invalid or points to non-existing entity
-      tags: *ref_6
-      security: *ref_7
+        '401': *ref_9
+      tags: *ref_10
+      security: *ref_11
   /track/{id}:
     get:
       operationId: TrackController_findOne
@@ -440,10 +461,11 @@ paths:
                 $ref: '#/components/schemas/TrackResponseDto'
         '400':
           description: Provided id of track is invalid (not uuid)
+        '401': *ref_9
         '404':
           description: Track with provided id was not found
-      tags: *ref_6
-      security: *ref_7
+      tags: *ref_10
+      security: *ref_11
     put:
       operationId: TrackController_updateInfo
       summary: Update track information
@@ -474,10 +496,11 @@ paths:
           description: >-
             Provided id of track is invalid (not uuid) or one of ids in DTO is
             invalid or points to non-existing entity
+        '401': *ref_9
         '404':
           description: Track with provided id was not found
-      tags: *ref_6
-      security: *ref_7
+      tags: *ref_10
+      security: *ref_11
     delete:
       operationId: TrackController_remove
       summary: Delete track
@@ -496,10 +519,11 @@ paths:
           description: Track has been successfully deleted
         '400':
           description: Provided id of track is invalid (not uuid)
+        '401': *ref_9
         '404':
           description: Track with provided id was not found
-      tags: *ref_6
-      security: *ref_7
+      tags: *ref_10
+      security: *ref_11
   /favs:
     get:
       operationId: FavsController_findAll
@@ -513,9 +537,11 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FavsResponseDto'
-      tags: &ref_8
+        '401': &ref_12
+          description: Access token is missing or invalid
+      tags: &ref_13
         - favs
-      security: &ref_9
+      security: &ref_14
         - bearer: []
   /favs/album/{id}:
     post:
@@ -536,10 +562,11 @@ paths:
           description: The album has been successfully added to favorites
         '400':
           description: Provided id of album is invalid (not uuid)
+        '401': *ref_12
         '422':
           description: Album with provided id was not found
-      tags: *ref_8
-      security: *ref_9
+      tags: *ref_13
+      security: *ref_14
     delete:
       operationId: FavsController_removeAlbum
       summary: Delete album from favorites
@@ -558,10 +585,11 @@ paths:
           description: Album has been successfully deleted from the favorites
         '400':
           description: Provided id of album is invalid (not uuid)
+        '401': *ref_12
         '404':
           description: Album with provided id was not found in the favorites
-      tags: *ref_8
-      security: *ref_9
+      tags: *ref_13
+      security: *ref_14
   /favs/artist/{id}:
     post:
       operationId: FavsController_addArtist
@@ -581,10 +609,11 @@ paths:
           description: The artist has been successfully added to favorites
         '400':
           description: Provided id of artist is invalid (not uuid)
+        '401': *ref_12
         '422':
           description: Artist with provided id was not found
-      tags: *ref_8
-      security: *ref_9
+      tags: *ref_13
+      security: *ref_14
     delete:
       operationId: FavsController_removeArtist
       summary: Delete artist from favorites
@@ -603,10 +632,11 @@ paths:
           description: Artist has been successfully deleted from the favorites
         '400':
           description: Provided id of artist is invalid (not uuid)
+        '401': *ref_12
         '404':
           description: Artist with provided id was not found in the favorites
-      tags: *ref_8
-      security: *ref_9
+      tags: *ref_13
+      security: *ref_14
   /favs/track/{id}:
     post:
       operationId: FavsController_addTrack
@@ -626,10 +656,11 @@ paths:
           description: The track has been successfully added to favorites
         '400':
           description: Provided id of track is invalid (not uuid)
+        '401': *ref_12
         '422':
           description: Track with provided id was not found
-      tags: *ref_8
-      security: *ref_9
+      tags: *ref_13
+      security: *ref_14
     delete:
       operationId: FavsController_removeTrack
       summary: Delete track from favorites
@@ -648,10 +679,11 @@ paths:
           description: Track has been successfully deleted from the favorites
         '400':
           description: Provided id of track is invalid (not uuid)
+        '401': *ref_12
         '404':
           description: Track with provided id was not found in the favorites
-      tags: *ref_8
-      security: *ref_9
+      tags: *ref_13
+      security: *ref_14
   /auth/signup:
     post:
       operationId: AuthController_signup
@@ -673,7 +705,7 @@ paths:
                 $ref: '#/components/schemas/UserResponseDto'
         '400':
           description: Request body does not contain required fields
-      tags: &ref_10
+      tags: &ref_15
         - auth
   /auth/login:
     post:
@@ -698,7 +730,7 @@ paths:
           description: DTO is invalid (no login or password, or they are not a strings)
         '403':
           description: Incorrect login or password
-      tags: *ref_10
+      tags: *ref_15
   /auth/refresh:
     post:
       operationId: AuthController_refresh
@@ -724,7 +756,7 @@ paths:
           description: >-
             Authentication failed (refresh token in the body is invalid or
             expired)
-      tags: *ref_10
+      tags: *ref_15
 info:
   title: Home Library Service
   description: 'Home Library Service: RS School NodeJS 2023 Q2 - Weeks 6-9 Task'
