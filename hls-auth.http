@@ -1,0 +1,29 @@
+# https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+@baseUrl = http://localhost:4000
+
+POST {{baseUrl}}/auth/signup
+Content-Type: application/json
+
+{
+  "login": "gentoosiast",
+  "password": "abracadabra"
+}
+
+###
+
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "login": "gentoosiast",
+  "password": "abracadabra"
+}
+
+###
+POST {{baseUrl}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "xyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJlNWMwZGE0My1mOWViLTQyZjktOTk2MC0xODY5ZDU0MGRkYjkiLCJsb2dpbiI6ImdlbnRvb3NpYXN0IiwiaWF0IjoxNjkyNTE2NzYzLCJleHAiOjE2OTI2MDMxNjN9.Hb_K70VuwBBhNO2qu-NUIcLCCe0KaVq6MbX9-cDnhI8"
+}
