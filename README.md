@@ -26,6 +26,14 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
 
 8. Everything should be ready and now you can run authentication tests `npm run test:auth` and check out logs written by custom logger in `./logs/` folder
 
+## JWT authentication
+
+Note: `/auth/refresh` route is not covered by unit tests. You can check it manually via Postman, Insomnia, or if you use [REST Client extension for VS Code](https://marketplace.visualstudio.com/items?itemName=humao.rest-client), you can perform requests using [hls-auth.http](hls-auth.http) provided by me.
+
+## Custom logger
+
+Logs are residing in the `./logs/` folder mounted via Docker bind mount. There are two log files: `current-combined.log` - contains log messages with all matching log levels, and `current-error.log` - contains only log messages with `error` logging level. When log file reaches configured size, it will be moved to `<timestamp>-combined.log` or `<timestamp>-error.log` and new log file with `current-` prefix will be created.
+
 ## Available .env settings
 
 - `PORT` - port number on which Home Library Service API will run in container and will be accessible outside
@@ -40,7 +48,7 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
 - `POSTGRES_PASSWORD` - password of superuser specified by `POSTGRES_USER` environment variable
 - `POSTGRES_DB` - default database that is created when the image is first started
 - `DATABASE_URL` - connection URL of Prisma ORM <https://www.prisma.io/docs/reference/database-reference/connection-urls#env>
-- `LOGGER_LOG_LEVEL` - log level. Available log levels:
+- `LOGGER_LOG_LEVEL` - log level. Logs with configured level are written as well as other higher priority levels. For example if you set logging level 2 (`log`), all messages with levels 3 (`warn`), and 4 (`error`) are also logged. Available log levels:
   - `0 - verbose`
   - `1 - debug`
   - `2 - log`
