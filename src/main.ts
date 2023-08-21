@@ -5,8 +5,8 @@ import { EnvironmentVariables } from '@config/interfaces/env-config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { description, version as appVersion } from 'package.json';
-import { GlobalExceptionFilter } from '@shared/filters/global/global-exception.filter';
-import { LoggingService } from '@shared/services/logging/logging.service';
+import { GlobalExceptionFilter } from '@core/filters/global/global-exception.filter';
+import { LoggingService } from '@core/services/logging/logging.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });

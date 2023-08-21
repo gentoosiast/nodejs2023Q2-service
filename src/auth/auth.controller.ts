@@ -14,7 +14,7 @@ import { TokenResponseDto } from './dtos/token-response.dto';
 import { RefreshTokenDto } from './dtos/refresh-token.dto';
 import { UserResponseDto } from '@user/dtos/user-response.dto';
 import { UserEntity } from '@user/entities/user.entity';
-import { SkipAuth } from '@shared/decorators/public';
+import { SkipAuth } from '@auth/decorators/public';
 import { AuthRefreshGuard } from './auth-refresh.guard';
 
 @ApiTags('auth')

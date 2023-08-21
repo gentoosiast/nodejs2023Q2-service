@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { BYTES_IN_KB } from '@shared/constants/logger';
-import { LogWriter } from '@shared/lib/log-writer/log-writer';
+import { BYTES_IN_KB } from '@core/constants/logger';
+import { LogWriter } from '@core/lib/log-writer/log-writer';
 
 @Injectable()
 export class LogWriterService {

@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiExcludeEndpoint } from '@nestjs/swagger';
 import { AppService } from './app.service';
-import { SkipAuth } from '@shared/decorators/public';
+import { SkipAuth } from '@auth/decorators/public';
 
 @Controller()
 export class AppController {

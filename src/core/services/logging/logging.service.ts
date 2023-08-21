@@ -8,7 +8,7 @@ import * as os from 'node:os';
 import { ConfigService } from '@nestjs/config';
 import { EnvironmentVariables } from '@config/interfaces/env-config';
 import { LogWriterService } from '../log-writer/log-writer.service';
-import { LogLevel } from '@shared/enums/log-level.enum';
+import { LogLevel } from '@core/enums/log-level.enum';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
@@ -64,7 +64,9 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
     stack?: string,
   ): void {
     const timeStamp = new Date().toLocaleString();
-    const output = `${timeStamp}: ${levelName.toUpperCase()} [${context}]: ${message}${
+    const output = `${timeStamp}: PID${
+      process.pid
+    } ${levelName.toUpperCase()} [${context}]: ${message}${
       stack ? os.EOL + stack : ''
     }`;
 
