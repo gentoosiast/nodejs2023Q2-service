@@ -12,7 +12,7 @@ Dockerized REST API with Prisma ORM & PostgreSQL database with Live-Reload suppo
 
 1. Clone this repository
 
-2. Switch to `feature/jwt-logger-exception-filter` branch: `git switch feature/jwt-logger-exception-filter`
+2. Switch to `feature/auth-logging` branch: `git switch feature/auth-logging`
 
 3. Install all project dependencies with `npm install`
 
