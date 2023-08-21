@@ -22,55 +22,57 @@ export class LoggingService extends ConsoleLogger implements LoggerService {
     super();
   }
 
-  async log(message: any, ...optionalParams: any[]) {
+  log(message: unknown, context?: string): void {
     if (this.logLevel > LogLevel.Log) {
       return;
     }
-    await this.outputMessage('log', message, optionalParams[0]);
+    this.outputMessage('log', message, context);
   }
 
-  async error(message: any, ...optionalParams: any[]) {
+  error(message: unknown, stack?: string, context?: string): void {
     if (this.logLevel > LogLevel.Error) {
       return;
     }
-    console.error(`optional 0: ${optionalParams[0]}`);
-    await this.outputMessage('error', message, optionalParams[1]);
+    this.outputMessage('error', message, context, stack);
   }
 
-  async warn(message: any, ...optionalParams: any[]) {
+  warn(message: unknown, context?: string): void {
     if (this.logLevel > LogLevel.Warn) {
       return;
     }
-    await this.outputMessage('warn', message, optionalParams[0]);
+    this.outputMessage('warn', message, context);
   }
 
-  async debug(message: any, ...optionalParams: any[]) {
+  debug(message: unknown, context?: string): void {
     if (this.logLevel > LogLevel.Debug) {
       return;
     }
-    await this.outputMessage('debug', message, optionalParams[0]);
+    this.outputMessage('debug', message, context);
   }
 
-  async verbose(message: any, ...optionalParams: any[]) {
+  verbose(message: unknown, context?: string): void {
     if (this.logLevel > LogLevel.Verbose) {
       return;
     }
-    await this.outputMessage('verbose', message, optionalParams[0]);
+    this.outputMessage('verbose', message, context);
   }
 
-  private async outputMessage(
+  private outputMessage(
     levelName: LogLevelName,
-    message: string,
+    message: unknown,
     context = 'UnknownContext',
-  ) {
+    stack?: string,
+  ): void {
     const timeStamp = new Date().toLocaleString();
-    const output = `${timeStamp}: ${levelName.toUpperCase()} [${context}]: ${message}`;
+    const output = `${timeStamp}: ${levelName.toUpperCase()} [${context}]: ${message}${
+      stack ? os.EOL + stack : ''
+    }`;
 
     console.log(this.colorize(output, levelName));
     this.writeToLog(output, levelName);
   }
 
-  private writeToLog(output: string, levelName: LogLevelName) {
+  private writeToLog(output: string, levelName: LogLevelName): void {
     this.logWriterService.writeToCombinedLog(output + os.EOL);
 
     if (levelName === 'error') {
