@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { LogWriter } from '@core/lib/log-writer/log-writer';
+import { parseNumber } from '@shared/helpers/parse-number';
 import { DEFAULT_LOGGER_MAX_FILE_SIZE } from '@config/constants';
 import { BYTES_IN_KB } from '@core/constants/logger';
 
 @Injectable()
 export class LogWriterService {
   private readonly maxFileSize =
-    (parseInt(process.env.LOGGER_MAX_FILE_SIZE, 10) ||
+    (parseNumber(process.env.LOGGER_MAX_FILE_SIZE) ??
       DEFAULT_LOGGER_MAX_FILE_SIZE) * BYTES_IN_KB;
   private readonly combinedLogWriter = new LogWriter(
     'combined',

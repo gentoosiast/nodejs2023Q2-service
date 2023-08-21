@@ -7,12 +7,13 @@ import {
 import * as os from 'node:os';
 import { LogWriterService } from '../log-writer/log-writer.service';
 import { LogLevel } from '@core/enums/log-level.enum';
+import { parseNumber } from '@shared/helpers/parse-number';
 import { DEFAULT_LOGGER_LOG_LEVEL } from '@config/constants';
 
 @Injectable()
 export class LoggingService extends ConsoleLogger implements LoggerService {
   private readonly logLevel =
-    parseInt(process.env.LOGGER_LOG_LEVEL, 10) || DEFAULT_LOGGER_LOG_LEVEL;
+    parseNumber(process.env.LOGGER_LOG_LEVEL) ?? DEFAULT_LOGGER_LOG_LEVEL;
 
   constructor(private readonly logWriterService: LogWriterService) {
     super();

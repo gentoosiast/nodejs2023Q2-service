@@ -1,3 +1,4 @@
+import { parseNumber } from '@shared/helpers/parse-number';
 import {
   DEFAULT_CRYPT_SALT,
   DEFAULT_LOGGER_LOG_LEVEL,
@@ -8,9 +9,9 @@ import {
 } from './constants';
 
 export default () => ({
-  port: parseInt(process.env.PORT, 10) || DEFAULT_PORT,
+  port: parseNumber(process.env.PORT) ?? DEFAULT_PORT,
   bcrypt: {
-    saltRounds: parseInt(process.env.CRYPT_SALT, 10) || DEFAULT_CRYPT_SALT,
+    saltRounds: parseNumber(process.env.CRYPT_SALT) ?? DEFAULT_CRYPT_SALT,
   },
   jwt: {
     accessSecret: process.env.JWT_SECRET_KEY,
@@ -22,9 +23,9 @@ export default () => ({
   },
   logger: {
     logLevel:
-      parseInt(process.env.LOGGER_LOG_LEVEL, 10) || DEFAULT_LOGGER_LOG_LEVEL,
+      parseNumber(process.env.LOGGER_LOG_LEVEL) ?? DEFAULT_LOGGER_LOG_LEVEL,
     maxFileSize:
-      parseInt(process.env.LOGGER_MAX_FILE_SIZE, 10) ||
+      parseNumber(process.env.LOGGER_MAX_FILE_SIZE) ??
       DEFAULT_LOGGER_MAX_FILE_SIZE,
   },
 });
